@@ -1,12 +1,9 @@
-# replace resource_type and local_name with your usecase
-# e.g. resource_type = azurerm_container_registry, local_name = container_registry
-
-output "local_name" {
+output "container_registry" {
   description = "Outputs all attributes of resource_type."
   value = {
-    for local_name in keys(resource_type.local_name) :
-    local_name => {
-      for key, value in resource_type.local_name[local_name] :
+    for container_registry in keys(azurerm_container_registry.container_registry) :
+    container_registry => {
+      for key, value in azurerm_container_registry.container_registry[container_registry] :
       key => value
     }
   }
@@ -20,9 +17,9 @@ output "variables" {
       variable => local.default[variable]
     }
     merged = {
-      local_name = {
-        for key in keys(var.local_name) :
-        key => local.local_name[key]
+      container_registry = {
+        for key in keys(var.container_registry) :
+        key => local.container_registry[key]
       }
     }
   }
