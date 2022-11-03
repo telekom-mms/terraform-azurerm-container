@@ -1,0 +1,20 @@
+---
+name: release
+
+on:
+  push:
+    branches:
+      - master
+      - main
+env:
+  TEMPLATE_REPOSITORY: 'T-Systems-MMS/terraform-template'
+  RELEASE_FILES: 'README.md'
+
+jobs:
+  call-readme:
+    if: github.repository != ${{ env.TEMPLATE_REPOSITORY }}
+    uses: T-Systems-MMS/.github/.github/workflows/terraform_readme.yml@workflows
+
+  call-release:
+    if: github.repository != ${{ env.TEMPLATE_REPOSITORY }}
+    uses: T-Systems-MMS/.github/.github/workflows/release.yml@workflows
