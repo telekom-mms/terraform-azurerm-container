@@ -1,0 +1,82 @@
+---
+name: test
+
+on: [pull_request]
+
+jobs:
+  scan-code:
+    runs-on: ubuntu-latest
+    container:
+      #image: ghcr.io/t-systems-mms/dmc:full
+      image: ghcr.io/t-systems-mms/dmc:master
+
+    strategy:
+      matrix:
+        example:
+          - min
+          # - full
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: build main.tf ${{ matrix.example }}
+        run: |
+          mkdir -p tests
+          cp examples/${{ matrix.example }}_main.tf tests/main.tf
+          sed -i 's/\<source\>.*/source\ =\ \".\/..\"/g' tests/main.tf
+          sed -i 's/\<version\>.*//g' tests/main.tf
+
+      - name: terrascan init
+        run: terrascan init
+        with:
+          context: ./tests
+
+      - name: terrascan scan
+        run: terrascan scan
+        with:
+          context: ./tests
+
+  test-code:
+    runs-on: ubuntu-latest
+    container:
+      #image: ghcr.io/t-systems-mms/dmc:full
+      image: ghcr.io/t-systems-mms/dmc:master
+
+    strategy:
+      matrix:
+        example:
+          - min
+          # - full
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: build main.tf ${{ matrix.example }}
+        run: |
+          mkdir -p tests
+          cp examples/${{ matrix.example }}_main.tf tests/main.tf
+          sed -i 's/\<source\>.*/source\ =\ \".\/..\"/g' tests/main.tf
+          sed -i 's/\<version\>.*//g' tests/main.tf
+
+      - name: terraform init
+        run: terraform init
+        with:
+          context: ./tests
+
+      # - name: terraform plan
+      #   run: terraform plan -refresh=false -compact-warnings
+      #   with:
+      #     context: ./tests
+
+      # - name: terraform apply
+      #   run: terraform apply -compact-warnings -auto-approve
+      #   with:
+      #     context: ./tests
+
+      # - name: terraform destroy
+      #   run: |
+      #     for state in $(terraform state list); do terraform plan -target $state; done
+      #   with:
+      #     context: ./tests
