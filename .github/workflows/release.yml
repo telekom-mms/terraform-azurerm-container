@@ -7,9 +7,8 @@ on:
       - master
       - main
 env:
-  TEMPLATE_REPOSITORY: 'T-Systems-MMS/terraform-template'
-  RELEASE_FILES:
-    - README.md
+  TEMPLATE_REPOSITORY: T-Systems-MMS/terraform-template
+  RELEASE_FILES: README.md
 
 jobs:
   call-readme:
