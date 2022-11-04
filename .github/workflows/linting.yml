@@ -9,4 +9,4 @@ env:
 jobs:
   call-linting:
     if: github.repository != '$TEMPLATE_REPOSITORY'
-    uses: T-Systems-MMS/.github/.github/workflows/terraform_linting.yml@workflows
+    uses: T-Systems-MMS/.github/.github/workflows/terraform_linting.yml@main
