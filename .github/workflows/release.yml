@@ -8,7 +8,6 @@ on:
       - main
 env:
   TEMPLATE_REPOSITORY: T-Systems-MMS/terraform-template
-  RELEASE_FILES: README.md
 
 jobs:
   call-readme:
@@ -19,4 +18,4 @@ jobs:
     if: github.repository != '$TEMPLATE_REPOSITORY'
     uses: T-Systems-MMS/.github/.github/workflows/release.yml@workflows
     with:
-      files: $RELEASE_FILES
+      files: README.md
