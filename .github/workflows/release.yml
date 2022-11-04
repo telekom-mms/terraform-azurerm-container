@@ -12,7 +12,7 @@ env:
 
 jobs:
   call-readme:
-    if: github.repository != $TEMPLATE_REPOSITORY
+    if: github.repository != '$TEMPLATE_REPOSITORY'
     uses: T-Systems-MMS/.github/.github/workflows/terraform_readme.yml@workflows
 
   call-release:
