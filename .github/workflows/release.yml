@@ -13,6 +13,3 @@ jobs:
   call-release:
     if: github.repository != '$TEMPLATE_REPOSITORY'
     uses: T-Systems-MMS/.github/.github/workflows/terraform_release.yml@main
-    with:
-      readme: terraform
-      files: README.md
