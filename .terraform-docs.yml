@@ -41,6 +41,13 @@ content: |-
   {{ include "examples/full_main.tf" }}
   ```
 
+output:
+  mode: replace
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
 sort:
   enabled: true
   by: required
