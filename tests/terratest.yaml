@@ -1,9 +1,3 @@
 # see https://pkg.go.dev/github.com/gruntwork-io/terratest/modules/[package]
-#functions: ["ContainerRegistryExists", "GetContainerRegistry"]
 functions: ["ContainerRegistryExists"]
 options: {}
-  # ContainerRegistryExists:
-  #   sku: "Basic"
-    # GetContainerRegistry:
-    #   admin_enabled: false
-    #   azure_enabled: None
