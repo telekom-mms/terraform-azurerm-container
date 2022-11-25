@@ -1,0 +1,12 @@
+---
+name: terratest
+
+on: [pull_request]
+
+env:
+  PACKAGE: Azure
+
+jobs:
+  call-test:
+    if: github.repository != 'T-Systems-MMS/terraform-template'
+    uses: T-Systems-MMS/.github/.github/workflows/terratest.yml@main

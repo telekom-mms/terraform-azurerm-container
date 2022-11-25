@@ -6,10 +6,8 @@ on:
     branches:
       - master
       - main
-env:
-  TEMPLATE_REPOSITORY: T-Systems-MMS/terraform-template
 
 jobs:
   call-release:
-    if: github.repository != '$TEMPLATE_REPOSITORY'
+    if: github.repository != 'T-Systems-MMS/terraform-template'
     uses: T-Systems-MMS/.github/.github/workflows/terraform_release.yml@main
