@@ -9,5 +9,4 @@ on:
 
 jobs:
   call-release:
-    if: github.repository != 'T-Systems-MMS/terraform-template'
     uses: T-Systems-MMS/.github/.github/workflows/terraform_release.yml@main

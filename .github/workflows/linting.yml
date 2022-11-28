@@ -5,5 +5,4 @@ on: [push, pull_request]
 
 jobs:
   call-linting:
-    if: github.repository != 'T-Systems-MMS/terraform-template'
     uses: T-Systems-MMS/.github/.github/workflows/terraform_linting.yml@main

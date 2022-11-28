@@ -5,5 +5,4 @@ on: [pull_request]
 
 jobs:
   call-scan:
-    if: github.repository != 'T-Systems-MMS/terraform-template'
     uses: T-Systems-MMS/.github/.github/workflows/terrascan.yml@main
