@@ -1,11 +1,11 @@
 ---
-name: terratest
+name: test
 
 on: [pull_request]
-
-env:
-  PACKAGE: Azure
 
 jobs:
   call-test:
     uses: T-Systems-MMS/.github/.github/workflows/terratest.yml@main
+    with:
+      tool: terratest
+      test: azure
