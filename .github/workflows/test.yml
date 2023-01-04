@@ -6,6 +6,3 @@ on: [pull_request]
 jobs:
   call-test:
     uses: T-Systems-MMS/.github/.github/workflows/terratest.yml@main
-    with:
-      tool: terratest
-      test: azure
