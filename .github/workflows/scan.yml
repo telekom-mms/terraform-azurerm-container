@@ -29,5 +29,4 @@ jobs:
     with:
       iac_type: ${{ inputs.iac_type }}
       policy_type: ${{ inputs.policy_type }}
-      verbose: true
       skip_rules: AC_AZURE_0185
