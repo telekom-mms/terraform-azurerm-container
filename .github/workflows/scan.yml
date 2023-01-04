@@ -1,8 +1,7 @@
 ---
 name: scan
 
-on:
-  pull_request:
+on: [pull_request]
 
 env:
   TEMPLATE_REPOSITORY: T-Systems-MMS/terraform-template
@@ -14,4 +13,4 @@ jobs:
     with:
       iac_type: terraform
       policy_type: all
-      skip_rules: AC_AZURE_0185
+      non_recursive: true

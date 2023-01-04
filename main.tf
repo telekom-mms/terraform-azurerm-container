@@ -7,6 +7,7 @@
 */
 
 resource "azurerm_container_registry" "container_registry" {
+  #ts:skip=AC_AZURE_0185 terrascan - resource lock not part of this module
   for_each = var.container_registry
 
   name                          = local.container_registry[each.key].name == "" ? each.key : local.container_registry[each.key].name
