@@ -9,7 +9,7 @@ env:
 jobs:
   call-scan:
     if: github.repository != '$TEMPLATE_REPOSITORY'
-    uses: T-Systems-MMS/.github/.github/workflows/terrascan.yml@main
+    uses: T-Systems-MMS/.github/.github/workflows/terrascan.yml@terrascan_settings
     with:
       iac_type: terraform
       policy_type: all
