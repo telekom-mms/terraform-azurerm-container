@@ -3,21 +3,6 @@ name: scan
 
 on:
   pull_request:
-  workflow_call:
-    inputs:
-      iac_type:
-        required: true
-        type: string
-        default: terraform
-        description: e.g. helm, k8s, kustomize, terraform - to see all supported types look at https://github.com/tenable/terrascan-action#iac_type
-      policy_type:
-        required: false
-        type: string
-        default: all
-        description: e.g. all, aws, azure, gcp, github, k8s - to see all supported types look at https://github.com/tenable/terrascan-action#policy_type
-      skip_rules:
-        required: false
-        type: string
 
 env:
   TEMPLATE_REPOSITORY: T-Systems-MMS/terraform-template
@@ -27,6 +12,6 @@ jobs:
     if: github.repository != '$TEMPLATE_REPOSITORY'
     uses: T-Systems-MMS/.github/.github/workflows/terrascan.yml@main
     with:
-      iac_type: ${{ inputs.iac_type }}
-      policy_type: ${{ inputs.policy_type }}
+      iac_type: terraform
+      policy_type: all
       skip_rules: AC_AZURE_0185
