@@ -10,7 +10,7 @@ locals {
     container_registry = {
       name                          = ""
       sku                           = "Basic"
-      admin_enabled                 = null
+      admin_enabled                 = false
       public_network_access_enabled = null
       quarantine_policy_enabled     = null
       zone_redundancy_enabled       = null
@@ -43,6 +43,11 @@ locals {
         key_vault_key_id   = null
         identity_client_id = null
       }
+      georeplications = {
+        regional_endpoint_enabled = false
+        zone_redundancy_enabled   = false
+        tags                      = {}
+      }
       tags = {}
     }
   }
@@ -59,7 +64,7 @@ locals {
     container_registry => merge(
       local.container_registry_values[container_registry],
       {
-        for config in ["retention_policy", "trust_policy", "identity", "encryption"] :
+        for config in ["retention_policy", "trust_policy", "identity", "encryption", "georeplications"] :
         config => merge(local.default.container_registry[config], local.container_registry_values[container_registry][config])
       },
       {

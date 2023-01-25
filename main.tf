@@ -89,5 +89,17 @@ resource "azurerm_container_registry" "container_registry" {
     }
   }
 
+  /** policy can only be applied when using the Premium sku */
+  dynamic "georeplications" {
+    for_each = local.container_registry[each.key].sku == "Premium" ? [1] : []
+
+    content {
+      location                  = local.container_registry[each.key].georeplications.location
+      regional_endpoint_enabled = local.container_registry[each.key].georeplications.regional_endpoint_enabled
+      zone_redundancy_enabled   = local.container_registry[each.key].georeplications.zone_redundancy_enabled
+      tags                      = local.container_registry[each.key].georeplications.tags
+    }
+  }
+
   tags = local.container_registry[each.key].tags
 }
