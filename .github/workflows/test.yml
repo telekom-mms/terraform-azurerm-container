@@ -11,4 +11,5 @@ jobs:
     if: github.repository != '$TEMPLATE_REPOSITORY'
     uses: T-Systems-MMS/.github/.github/workflows/terratest.yml@main
     with:
+      work_dir: ./terratest-action
       test: azure
