@@ -4,8 +4,9 @@ name: release
 on:
   push:
     branches:
-      - master
-      - main
+      - release_workflow
+      # - master
+      # - main
 
 jobs:
   call-readme:
