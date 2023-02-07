@@ -7,6 +7,7 @@
 */
 
 resource "azurerm_container_registry" "container_registry" {
+  #ts:skip=AC_AZURE_0185 terrascan - resource lock not part of this module
   for_each = var.container_registry
 
   name                          = local.container_registry[each.key].name == "" ? each.key : local.container_registry[each.key].name
@@ -85,6 +86,18 @@ resource "azurerm_container_registry" "container_registry" {
       enabled            = local.container_registry[each.key].encryption.enabled
       key_vault_key_id   = local.container_registry[each.key].encryption.key_vault_key_id
       identity_client_id = local.container_registry[each.key].encryption.identity_client_id
+    }
+  }
+
+  /** policy can only be applied when using the Premium sku */
+  dynamic "georeplications" {
+    for_each = local.container_registry[each.key].sku == "Premium" ? [1] : []
+
+    content {
+      location                  = local.container_registry[each.key].georeplications.location
+      regional_endpoint_enabled = local.container_registry[each.key].georeplications.regional_endpoint_enabled
+      zone_redundancy_enabled   = local.container_registry[each.key].georeplications.zone_redundancy_enabled
+      tags                      = local.container_registry[each.key].georeplications.tags
     }
   }
 
