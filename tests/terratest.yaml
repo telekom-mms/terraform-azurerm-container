@@ -1,5 +1,5 @@
-functions: ["ContainerRegistryExists", "GetContainerRegistry"]
+functions: ["ContainerRegistryExists", "ContainerRegistryShow"]
 options:
-  GetContainerRegistry:
+  ContainerRegistryShow:
     admin_enabled: false
     network_rule_bypass_option: None
