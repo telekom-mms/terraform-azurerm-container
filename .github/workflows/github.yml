@@ -1,0 +1,16 @@
+---
+name: github
+
+on:
+  schedule:
+    - cron: '00 10 * * *'
+  push:
+    paths:
+      - '.github/settings'
+
+env:
+  GITHUB_REPOSITORY: ${{ GITHUB_REPOSITORY }}
+
+jobs:
+  call-github:
+    uses: T-Systems-MMS/.github/.github/workflows/github.yml@main
