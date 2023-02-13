@@ -1,5 +1,5 @@
 repo:
   default-branch: main
-  private: false
-api:
-  access: write
+  delete-branch-on-merge: true
+  description: ""
+  visibility: public
