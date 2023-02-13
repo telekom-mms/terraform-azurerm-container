@@ -33,7 +33,7 @@ jobs:
         id: gh_repo
         uses: mikefarah/yq@v4
         with:
-          cmd: yq e '.repo' .github/settings.yaml
+          cmd: yq '.repo' .github/settings.yaml
 
       - name: gh repo edit
         run: |
