@@ -1,4 +1,5 @@
 repository:
+  name: terraform-azurerm-container
   default_branch: main
   private: false
   delete_branch_on_merge: true
