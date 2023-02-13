@@ -11,3 +11,5 @@ on:
 jobs:
   call-github:
     uses: T-Systems-MMS/.github/.github/workflows/github.yml@github_settings
+    with:
+      repository: ${{ github.repository }}
