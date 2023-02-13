@@ -1,3 +1,6 @@
-repository:
-  name: terraform-azurerm-container
-  default_branch: main
+repo:
+  add-topic: "terraform azure azurerm_container_registry"
+  default-branch: main
+  delete-branch-on-merge: true
+  description: "A Terraform module that manages the azurerm container resources."
+  visibility: public
