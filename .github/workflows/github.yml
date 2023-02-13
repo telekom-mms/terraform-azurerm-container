@@ -1,13 +1,46 @@
 ---
-name: github
+# name: github
+
+# on:
+#   schedule:
+#     - cron: '00 10 * * *'
+#   push:
+#     paths:
+#       - '.github/settings.yaml'
+
+# jobs:
+#   call-github:
+#     uses: T-Systems-MMS/.github/.github/workflows/github.yml@github_settings
+
+
+# ---
+name: Github Repository Settings
 
 on:
-  schedule:
-    - cron: '00 10 * * *'
   push:
-    paths:
-      - '.github/settings.yaml'
+
+env:
+  GITHUB_REPOSITORY: ${{ GITHUB_REPOSITORY }}
 
 jobs:
-  call-github:
-    uses: T-Systems-MMS/.github/.github/workflows/github.yml@github_settings
+  github:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: get GitHub Repository Settings
+        id: gh_repo
+        uses: mikefarah/yq@v4
+        with:
+          cmd: yq e '.repo' .github/settings.yaml
+
+      - name: gh repo edit
+        run: |
+          echo $gh_repo
+
+
+      # - name: gh repo edit
+      #   run: |
+      #     cat .github/settings.yaml | grep -i repo | awk -v repo=${GITHUB_REPOSITORY} '{printf("gh repo edit %s --%s %s\n", repo, $2, $3)}' > gh_repo_cmd
+      #     cat gh_repo_cmd | while read repo_cmd; do $repo_cmd; done

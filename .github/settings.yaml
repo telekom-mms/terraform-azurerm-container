@@ -1,3 +1,5 @@
-repository:
-  name: terraform-azurerm-container
-  default_branch: main
+repo:
+  default-branch: main
+  private: false
+api:
+  access: write
