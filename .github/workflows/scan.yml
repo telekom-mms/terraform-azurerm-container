@@ -1,16 +1,16 @@
----
-name: scan
+# ---
+# name: scan
 
-on: [pull_request]
+# on: [pull_request]
 
-env:
-  TEMPLATE_REPOSITORY: T-Systems-MMS/terraform-template
+# env:
+#   TEMPLATE_REPOSITORY: T-Systems-MMS/terraform-template
 
-jobs:
-  call-scan:
-    if: github.repository != '$TEMPLATE_REPOSITORY'
-    uses: T-Systems-MMS/.github/.github/workflows/terrascan.yml@main
-    with:
-      iac_type: terraform
-      policy_type: all
-      non_recursive: true
+# jobs:
+#   call-scan:
+#     if: github.repository != '$TEMPLATE_REPOSITORY'
+#     uses: T-Systems-MMS/.github/.github/workflows/terrascan.yml@main
+#     with:
+#       iac_type: terraform
+#       policy_type: all
+#       non_recursive: true

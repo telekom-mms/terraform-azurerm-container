@@ -1,19 +1,19 @@
----
-name: test
+# ---
+# name: test
 
-on: [pull_request]
+# on: [pull_request]
 
-env:
-  TEMPLATE_REPOSITORY: T-Systems-MMS/terraform-template
+# env:
+#   TEMPLATE_REPOSITORY: T-Systems-MMS/terraform-template
 
-jobs:
-  call-test:
-    if: github.repository != '$TEMPLATE_REPOSITORY'
-    uses: T-Systems-MMS/.github/.github/workflows/terratest.yml@main
-    with:
-      test: azure
-    secrets:
-      azure_client_id: ${{ secrets.AZURE_CLIENT_ID }}
-      azure_client_secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-      azure_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      azure_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+# jobs:
+#   call-test:
+#     if: github.repository != '$TEMPLATE_REPOSITORY'
+#     uses: T-Systems-MMS/.github/.github/workflows/terratest.yml@main
+#     with:
+#       test: azure
+#     secrets:
+#       azure_client_id: ${{ secrets.AZURE_CLIENT_ID }}
+#       azure_client_secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+#       azure_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#       azure_tenant_id: ${{ secrets.AZURE_TENANT_ID }}

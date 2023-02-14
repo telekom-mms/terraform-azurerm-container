@@ -8,6 +8,21 @@ on:
     paths:
       - '.github/settings.yaml'
 
+# jobs:
+#   call-github:
+#     uses: T-Systems-MMS/.github/.github/workflows/github.yml@github_settings
+
 jobs:
-  call-github:
-    uses: T-Systems-MMS/.github/.github/workflows/github.yml@github_settings
+  github:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up yq
+        uses: frenck/action-setup-yq@v1
+
+      - name: get and set repository settings
+        run: |
+          yq e '.repo' .github/settings.yaml > gh_repo
+          cat gh_repo
