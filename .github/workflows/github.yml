@@ -30,3 +30,5 @@ jobs:
 
           # get and set settings
           cat gh_repo | while read repo_cmd; do gh repo edit ${GITHUB_REPOSITORY} --$repo_cmd; done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_CLI_TOKEN }}
