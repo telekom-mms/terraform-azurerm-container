@@ -4,5 +4,5 @@ repo:
     - azure
   default-branch: main
   delete-branch-on-merge: true
-  description: A Terraform module that manages the container resources from the azurerm provider.
+  description: "A Terraform module that manages the container resources from the azurerm provider."
   visibility: public
