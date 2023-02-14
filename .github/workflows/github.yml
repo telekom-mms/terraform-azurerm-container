@@ -1,12 +1,12 @@
 ---
 name: github
 
-on:
-  schedule:
-    - cron: '00 10 * * *'
-  push:
-    paths:
-      - '.github/settings.yaml'
+on: [push]
+  # schedule:
+  #   - cron: '00 10 * * *'
+  # push:
+  #   paths:
+  #     - '.github/settings.yaml'
 
 # jobs:
 #   call-github:
