@@ -25,8 +25,8 @@ jobs:
       - name: gh repo edit
         run: |
           # add-topic must be splittet into one command for each topic
-          yq -r '.repo | to_entries | .[] | select( .key != "add-topic") | [.key, .value] | join(" ")' .github/settings.yaml > gh_repo
-          yq -r '.repo | to_entries | .[] | select( .key == "add-topic") | .value[] | sub("(.*)", "add-topic ${0}")' .github/settings.yaml >> gh_repo
+          yq '.repo | with_entries(select(.key != "add-topic"))' .github/settings.yaml | tr -d : >  gh_repo
+          yq '.repo | with_entries(select(.key == "add-topic")) | to_entries | .[].value[] | sub("(.*)", "add-topic ${0}")' .github/settings.yaml >>  gh_repo
 
           # get and set settings
           cat gh_repo | while read repo_cmd; do echo "gh repo edit ${GITHUB_REPOSITORY} --$repo_cmd" && gh repo edit ${GITHUB_REPOSITORY} --$repo_cmd; done
