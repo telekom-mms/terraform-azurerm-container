@@ -11,3 +11,5 @@ on:
 jobs:
   call-github:
     uses: T-Systems-MMS/.github/.github/workflows/github.yml@github_settings
+    secrets:
+      GH_CLI_TOKEN: ${{ secrets.GH_CLI_TOKEN }}
