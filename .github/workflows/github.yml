@@ -8,10 +8,27 @@ on:
     branches:
       - main
     paths:
-      - '.github/settings.yaml'
+      - '.github/settings.json'
 
 jobs:
-  call-github:
-    uses: T-Systems-MMS/.github/.github/workflows/github.yml@github_settings
-    secrets:
-      GH_CLI_TOKEN: ${{ secrets.GH_CLI_TOKEN }}
+  github:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup jq
+        uses: dcarbone/install-jq-action@v1.0.1
+
+      - name: gh cli
+        run: |
+          REPOSITORY=$(gh repo view --json nameWithOwner -q ".nameWithOwner")
+
+          # use gh api
+          jq '.repos | del(.repos.topics)' ${SETTINGS} | gh api -X PATCH -H "Accept: application/vnd.github+json" /repos/${REPOSITORY} --input -
+          ## no support for topics use gh repo instead
+          TOPICS=$(jq '(.repos.topics) | .[]' ${SETTINGS})
+          for TOPIC in ${TOPICS}; do gh repo edit --add-topic ${TOPIC}; done
+        env:
+          SETTINGS: .github/settings.json
+          GH_TOKEN: ${{ secrets.GH_CLI_TOKEN }}

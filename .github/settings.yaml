@@ -1,9 +1,0 @@
-repo:
-  add-topic:
-    - terraform
-    - azure
-    - azurerm-container-registry
-  default-branch: main
-  description: "Terraform"
-  homepage: https://t-systems-mms.github.io/
-  visibility: public
