@@ -4,4 +4,5 @@ repo:
     - azure
     - azurerm-container-registry
   default-branch: main
+  homepage: https://t-systems-mms.github.io/
   visibility: public
