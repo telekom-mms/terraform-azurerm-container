@@ -1,4 +1,8 @@
 repo:
+  add-topic:
+    - terraform
+    - azure
+    - azurerm_container_registry
   default-branch: main
-  delete-branch-on-merge: true
+  homepage: https://t-systems-mms.github.io/
   visibility: public
