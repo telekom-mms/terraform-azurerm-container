@@ -4,6 +4,4 @@ repo:
     - azure
     - azurerm-container-registry
   default-branch: main
-  description: "A Terraform module that manages the container resources from the azurerm provider."
-  homepage: https://t-systems-mms.github.io/
   visibility: public
