@@ -4,6 +4,7 @@ module "container" {
     crmms = {
       location            = "westeurope"
       resource_group_name = "rg-mms-github"
+      sku                 = "Premium"
       tags = {
         project     = "mms-github"
         environment = terraform.workspace

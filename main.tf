@@ -30,8 +30,10 @@ resource "azurerm_container_registry" "container_registry" {
     content {
       default_action = local.container_registry[each.key].network_rule_set.default_action
 
+      /** ip_rule and / or virtual_network are optional */
       dynamic "ip_rule" {
-        for_each = local.container_registry[each.key].network_rule_set.ip_rule
+        for_each = contains(keys(local.container_registry[each.key].network_rule_set.ip_rule), "action") ? {} : local.container_registry[each.key].network_rule_set.ip_rule
+
         content {
           action   = local.container_registry[each.key].network_rule_set.ip_rule[ip_rule.key].action
           ip_range = local.container_registry[each.key].network_rule_set.ip_rule[ip_rule.key].ip_range
@@ -39,7 +41,8 @@ resource "azurerm_container_registry" "container_registry" {
       }
 
       dynamic "virtual_network" {
-        for_each = local.container_registry[each.key].network_rule_set.virtual_network
+        for_each = contains(keys(local.container_registry[each.key].network_rule_set.virtual_network), "action") ? {} : local.container_registry[each.key].network_rule_set.virtual_network
+
         content {
           action    = local.container_registry[each.key].network_rule_set.virtual_network[virtual_network.key].action
           subnet_id = local.container_registry[each.key].network_rule_set.virtual_network[virtual_network.key].subnet_id
@@ -91,7 +94,7 @@ resource "azurerm_container_registry" "container_registry" {
 
   /** policy can only be applied when using the Premium sku */
   dynamic "georeplications" {
-    for_each = local.container_registry[each.key].sku == "Premium" ? [1] : []
+    for_each = local.container_registry[each.key].sku == "Premium" && local.container_registry[each.key].georeplications.location != "" ? [1] : []
 
     content {
       location                  = local.container_registry[each.key].georeplications.location

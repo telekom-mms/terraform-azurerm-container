@@ -19,7 +19,7 @@ locals {
       anonymous_pull_enabled        = null
       data_endpoint_enabled         = null
       network_rule_set = {
-        default_action = "Deny"
+        default_action = "Deny" /** behaviour for requests matching no rules */
         ip_rule = {
           action = "Allow"
         }
@@ -44,6 +44,7 @@ locals {
         identity_client_id = null
       }
       georeplications = {
+        location                  = ""
         regional_endpoint_enabled = false
         zone_redundancy_enabled   = false
         tags                      = {}
