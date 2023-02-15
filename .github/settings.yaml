@@ -2,7 +2,9 @@ repo:
   add-topic:
     - terraform
     - azure
-    - azurerm_container_registry
+    - azurerm-container-registry
   default-branch: main
+  delete-branch-on-merge: true
+  description: "A Terraform module that manages the tpl_resources resources from the azurerm provider."
   homepage: https://t-systems-mms.github.io/
   visibility: public
