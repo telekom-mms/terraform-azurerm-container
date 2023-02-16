@@ -25,7 +25,7 @@ jobs:
           REPOSITORY=$(gh repo view --json nameWithOwner -q ".nameWithOwner")
 
           # use gh api
-          jq '.repos | del(.repos.topics)' ${SETTINGS} | gh api -X PATCH -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${GH_TOKEN}" /repos/${REPOSITORY} --input -
+          #jq '.repos | del(.repos.topics)' ${SETTINGS} | gh api -X PATCH -H "Accept: application/vnd.github+json" /repos/${REPOSITORY} --input -
           ## no support for topics use gh repo instead
           TOPICS=$(jq '(.repos.topics) | .[]' ${SETTINGS})
           for TOPIC in ${TOPICS}; do gh repo edit --add-topic ${TOPIC}; done
