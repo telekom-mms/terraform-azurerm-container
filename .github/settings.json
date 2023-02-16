@@ -6,6 +6,7 @@
     "default_branch": "main",
     "topics": [
       "terraform",
+      "azure",
       "azurerm-container-registry"
     ]
   }
