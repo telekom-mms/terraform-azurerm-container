@@ -6,8 +6,7 @@
   "packageRules": [
     {
       "matchUpdateTypes": ["patch"],
-      "automerge": true,
-      "versioning": "hashicorp"
+      "automerge": true
     }
   ]
 }
