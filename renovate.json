@@ -6,7 +6,8 @@
   "packageRules": [
     {
       "matchUpdateTypes": ["patch"],
-      "automerge": true
+      "automerge": true,
+      "rangeStrategy": "widen"
     }
   ]
 }
