@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/T-Systems-MMS/terraform-azurerm-container/tree/1.0.1) (2023-03-13)
+
+[Full Changelog](https://github.com/T-Systems-MMS/terraform-azurerm-container/compare/1.0.0...1.0.1)
+
+**Closed issues:**
+
+- Action Required: Fix Renovate Configuration [\#34](https://github.com/T-Systems-MMS/terraform-azurerm-container/issues/34)
+
 ## [1.0.0](https://github.com/T-Systems-MMS/terraform-azurerm-container/tree/1.0.0) (2023-02-28)
 
 [Full Changelog](https://github.com/T-Systems-MMS/terraform-azurerm-container/compare/84d737c3af7f58cd1db5fc76f3752ead69af7866...1.0.0)
