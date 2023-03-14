@@ -8,8 +8,12 @@ on:
   schedule:
     - cron: '0 10 * * *'
 
+env:
+  TEMPLATE_REPOSITORY: T-Systems-MMS/terraform-template
+
 jobs:
   call-settings:
-    uses: T-Systems-MMS/.github/.github/workflows/github_repository.yml@add_repository_settings
+    if: github.repository != '$TEMPLATE_REPOSITORY'
+    uses: T-Systems-MMS/.github/.github/workflows/github_repository.yml@main
     secrets:
       GH_APP_CREDENTIALS_TOKEN: ${{ secrets.GH_APP_CREDENTIALS_TOKEN }}
