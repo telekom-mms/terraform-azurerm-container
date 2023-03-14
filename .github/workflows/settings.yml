@@ -1,0 +1,13 @@
+---
+name: settings
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 10 * * *'
+
+jobs:
+  call-settings:
+    uses: T-Systems-MMS/.github/.github/workflows/github_repository.yml@add_repository_settings
