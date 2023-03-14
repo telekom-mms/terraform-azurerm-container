@@ -11,3 +11,5 @@ on:
 jobs:
   call-settings:
     uses: T-Systems-MMS/.github/.github/workflows/github_repository.yml@add_repository_settings
+    secrets:
+      GH_APP_CREDENTIALS_TOKEN: ${{ secrets.GH_APP_CREDENTIALS_TOKEN }}
