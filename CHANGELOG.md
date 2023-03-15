@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.1](https://github.com/T-Systems-MMS/terraform-azurerm-container/tree/1.0.1) (2023-03-14)
+## [1.0.1](https://github.com/T-Systems-MMS/terraform-azurerm-container/tree/1.0.1) (2023-03-15)
 
 [Full Changelog](https://github.com/T-Systems-MMS/terraform-azurerm-container/compare/1.0.0...1.0.1)
 
