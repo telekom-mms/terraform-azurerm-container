@@ -7,7 +7,6 @@
 **Closed issues:**
 
 - Action Required: Fix Renovate Configuration [\#34](https://github.com/telekom-mms/terraform-azurerm-container/issues/34)
-- Dependency Dashboard [\#2](https://github.com/telekom-mms/terraform-azurerm-container/issues/2)
 
 ## [1.0.0](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.0) (2023-02-28)
 
