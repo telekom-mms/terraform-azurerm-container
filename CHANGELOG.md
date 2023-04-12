@@ -1,23 +1,23 @@
 # Changelog
 
-## [1.0.1](https://github.com/T-Systems-MMS/terraform-azurerm-container/tree/1.0.1) (2023-03-15)
+## [1.0.1](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.1) (2023-04-12)
 
-[Full Changelog](https://github.com/T-Systems-MMS/terraform-azurerm-container/compare/1.0.0...1.0.1)
+[Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.0...1.0.1)
 
 **Closed issues:**
 
-- Action Required: Fix Renovate Configuration [\#34](https://github.com/T-Systems-MMS/terraform-azurerm-container/issues/34)
-- Dependency Dashboard [\#2](https://github.com/T-Systems-MMS/terraform-azurerm-container/issues/2)
+- Action Required: Fix Renovate Configuration [\#34](https://github.com/telekom-mms/terraform-azurerm-container/issues/34)
+- Dependency Dashboard [\#2](https://github.com/telekom-mms/terraform-azurerm-container/issues/2)
 
-## [1.0.0](https://github.com/T-Systems-MMS/terraform-azurerm-container/tree/1.0.0) (2023-02-28)
+## [1.0.0](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.0) (2023-02-28)
 
-[Full Changelog](https://github.com/T-Systems-MMS/terraform-azurerm-container/compare/84d737c3af7f58cd1db5fc76f3752ead69af7866...1.0.0)
+[Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/84d737c3af7f58cd1db5fc76f3752ead69af7866...1.0.0)
 
 **Merged pull requests:**
 
-- Version [\#17](https://github.com/T-Systems-MMS/terraform-azurerm-container/pull/17) ([michaelamattes](https://github.com/michaelamattes))
-- Test [\#6](https://github.com/T-Systems-MMS/terraform-azurerm-container/pull/6) ([michaelamattes](https://github.com/michaelamattes))
-- add Renovate Dependency Dashboard and automatic merge on patch updates [\#3](https://github.com/T-Systems-MMS/terraform-azurerm-container/pull/3) ([michaelamattes](https://github.com/michaelamattes))
+- Version [\#17](https://github.com/telekom-mms/terraform-azurerm-container/pull/17) ([michaelamattes](https://github.com/michaelamattes))
+- Test [\#6](https://github.com/telekom-mms/terraform-azurerm-container/pull/6) ([michaelamattes](https://github.com/michaelamattes))
+- add Renovate Dependency Dashboard and automatic merge on patch updates [\#3](https://github.com/telekom-mms/terraform-azurerm-container/pull/3) ([michaelamattes](https://github.com/michaelamattes))
 
 
 

@@ -44,7 +44,7 @@ Minimal configuration to install the desired resources with the module
 
 ```hcl
 module "container" {
-  source = "registry.terraform.io/T-Systems-MMS/container/azurerm"
+  source = "registry.terraform.io/telekom-mms/container/azurerm"
   container_registry = {
     crmms = {
       location            = "westeurope"
@@ -58,7 +58,7 @@ Advanced configuration to install the desired resources with the module
 
 ```hcl
 module "container" {
-  source = "registry.terraform.io/T-Systems-MMS/container/azurerm"
+  source = "registry.terraform.io/telekom-mms/container/azurerm"
   container_registry = {
     crmms = {
       location            = "westeurope"
