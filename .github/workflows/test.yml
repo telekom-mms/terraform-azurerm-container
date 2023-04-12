@@ -4,12 +4,12 @@ name: test
 on: [pull_request]
 
 env:
-  TEMPLATE_REPOSITORY: T-Systems-MMS/terraform-template
+  TEMPLATE_REPOSITORY: telekom-mms/terraform-template
 
 jobs:
   call-test:
     if: github.repository != '$TEMPLATE_REPOSITORY'
-    uses: T-Systems-MMS/.github/.github/workflows/terratest.yml@main
+    uses: telekom-mms/.github/.github/workflows/terratest.yml@main
     with:
       test: azure
     secrets:

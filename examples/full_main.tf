@@ -1,5 +1,5 @@
 module "container" {
-  source = "registry.terraform.io/T-Systems-MMS/container/azurerm"
+  source = "registry.terraform.io/telekom-mms/container/azurerm"
   container_registry = {
     crmms = {
       location            = "westeurope"
