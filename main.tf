@@ -1,8 +1,8 @@
 /**
 * # container
 *
-* This module manages the azurerm container resources.
-* For more information see https://registry.terraform.io/providers/azurerm/latest/docs > container
+* This module manages the hashicorp/azurerm container resources.
+* For more information see https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs > container
 *
 */
 

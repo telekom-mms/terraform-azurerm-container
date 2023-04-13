@@ -6,7 +6,7 @@ variable "container_registry" {
 
 locals {
   default = {
-    /** resource definition */
+    // resource definition
     container_registry = {
       name                          = ""
       sku                           = "Basic"
@@ -15,11 +15,11 @@ locals {
       quarantine_policy_enabled     = null
       zone_redundancy_enabled       = null
       export_policy_enabled         = null
-      network_rule_bypass_option    = "None" /** disallows default AzureServices as enabled for access */
+      network_rule_bypass_option    = "None" // disallows default AzureServices as enabled for access
       anonymous_pull_enabled        = null
       data_endpoint_enabled         = null
       network_rule_set = {
-        default_action = "Deny" /** behaviour for requests matching no rules */
+        default_action = "Deny" // behaviour for requests matching no rules
         ip_rule = {
           action = "Allow"
         }
@@ -53,13 +53,13 @@ locals {
     }
   }
 
-  /** compare and merge custom and default values */
+  // compare and merge custom and default values
   container_registry_values = {
     for container_registry in keys(var.container_registry) :
     container_registry => merge(local.default.container_registry, var.container_registry[container_registry])
   }
 
-  /** deep merge of all custom and default values */
+  // deep merge of all custom and default values
   container_registry = {
     for container_registry in keys(var.container_registry) :
     container_registry => merge(
