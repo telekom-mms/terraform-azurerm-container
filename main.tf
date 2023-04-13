@@ -23,14 +23,14 @@ resource "azurerm_container_registry" "container_registry" {
   anonymous_pull_enabled        = local.container_registry[each.key].anonymous_pull_enabled
   data_endpoint_enabled         = local.container_registry[each.key].data_endpoint_enabled
 
-  /** policy can only be applied when using the Premium sku */
+  // policy can only be applied when using the Premium sku
   dynamic "network_rule_set" {
     for_each = local.container_registry[each.key].sku == "Premium" ? [1] : []
 
     content {
       default_action = local.container_registry[each.key].network_rule_set.default_action
 
-      /** ip_rule and / or virtual_network are optional */
+      // ip_rule and / or virtual_network are optional
       dynamic "ip_rule" {
         for_each = contains(keys(local.container_registry[each.key].network_rule_set.ip_rule), "action") ? {} : local.container_registry[each.key].network_rule_set.ip_rule
 
@@ -51,7 +51,7 @@ resource "azurerm_container_registry" "container_registry" {
     }
   }
 
-  /** policy can only be applied when using the Premium sku */
+  // policy can only be applied when using the Premium sku
   dynamic "retention_policy" {
     for_each = local.container_registry[each.key].sku == "Premium" ? [1] : []
 
@@ -61,7 +61,7 @@ resource "azurerm_container_registry" "container_registry" {
     }
   }
 
-  /** policy can only be applied when using the Premium sku */
+  // policy can only be applied when using the Premium sku
   dynamic "trust_policy" {
     for_each = local.container_registry[each.key].sku == "Premium" ? [1] : []
 
@@ -92,7 +92,7 @@ resource "azurerm_container_registry" "container_registry" {
     }
   }
 
-  /** policy can only be applied when using the Premium sku */
+  // policy can only be applied when using the Premium sku
   dynamic "georeplications" {
     for_each = local.container_registry[each.key].sku == "Premium" && local.container_registry[each.key].georeplications.location != "" ? [1] : []
 
