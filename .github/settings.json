@@ -1,7 +1,6 @@
 {
   "repos": {
     "description": "A Terraform module that manages the container resources from the azurerm provider.",
-    "homepage": "https://telekom-mms.github.io",
     "visibility": "public",
     "default_branch": "main",
     "topics": [

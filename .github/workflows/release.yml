@@ -3,8 +3,7 @@ name: release
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 env:
   TEMPLATE_REPOSITORY: telekom-mms/terraform-template

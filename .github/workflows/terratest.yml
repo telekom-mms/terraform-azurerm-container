@@ -1,13 +1,15 @@
 ---
 name: test
 
-on: [pull_request]
+on:
+  pull_request:
+    branches: [main]
 
 env:
   TEMPLATE_REPOSITORY: telekom-mms/terraform-template
 
 jobs:
-  call-test:
+  call-terratest:
     if: github.repository != '$TEMPLATE_REPOSITORY'
     uses: telekom-mms/.github/.github/workflows/terratest.yml@main
     with:
