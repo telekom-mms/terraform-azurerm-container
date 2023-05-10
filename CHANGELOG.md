@@ -4,6 +4,10 @@
 
 [Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.0...1.0.1)
 
+**Fixed bugs:**
+
+- fix style of comments [\#35](https://github.com/telekom-mms/terraform-azurerm-container/pull/35) ([michaelamattes](https://github.com/michaelamattes))
+
 **Closed issues:**
 
 - Action Required: Fix Renovate Configuration [\#34](https://github.com/telekom-mms/terraform-azurerm-container/issues/34)
