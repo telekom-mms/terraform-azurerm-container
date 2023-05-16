@@ -106,3 +106,431 @@ resource "azurerm_container_registry" "container_registry" {
 
   tags = local.container_registry[each.key].tags
 }
+
+resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
+  for_each = var.kubernetes_cluster
+
+  name                                = local.kubernetes_cluster[each.key].name == "" ? each.key : local.kubernetes_cluster[each.key].name
+  location                            = local.kubernetes_cluster[each.key].location
+  resource_group_name                 = local.kubernetes_cluster[each.key].resource_group_name
+  dns_prefix                          = merge(local.kubernetes_cluster[each.key].dns_prefix, local.kubernetes_cluster[each.key].dns_prefix_private_cluster) == {} ? each.key : local.kubernetes_cluster[each.key].dns_prefix
+  dns_prefix_private_cluster          = local.kubernetes_cluster[each.key].dns_prefix_private_cluster
+  automatic_channel_upgrade           = local.kubernetes_cluster[each.key].automatic_channel_upgrade
+  azure_policy_enabled                = local.kubernetes_cluster[each.key].azure_policy_enabled
+  disk_encryption_set_id              = local.kubernetes_cluster[each.key].disk_encryption_set_id
+  edge_zone                           = local.kubernetes_cluster[each.key].edge_zone
+  http_application_routing_enabled    = local.kubernetes_cluster[each.key].http_application_routing_enabled
+  image_cleaner_enabled               = local.kubernetes_cluster[each.key].image_cleaner_enabled
+  image_cleaner_interval_hours        = local.kubernetes_cluster[each.key].image_cleaner_interval_hours
+  kubernetes_version                  = local.kubernetes_cluster[each.key].kubernetes_version == null ? data.azurerm_kubernetes_service_versions.kubernetes_service_versions[each.key].latest_version : local.kubernetes_cluster[each.key].kubernetes_version
+  local_account_disabled              = local.kubernetes_cluster[each.key].local_account_disabled
+  node_resource_group                 = local.kubernetes_cluster[each.key].node_resource_group
+  oidc_issuer_enabled                 = local.kubernetes_cluster[each.key].oidc_issuer_enabled
+  open_service_mesh_enabled           = local.kubernetes_cluster[each.key].open_service_mesh_enabled
+  private_cluster_enabled             = local.kubernetes_cluster[each.key].private_cluster_enabled
+  private_dns_zone_id                 = local.kubernetes_cluster[each.key].private_dns_zone_id
+  private_cluster_public_fqdn_enabled = local.kubernetes_cluster[each.key].private_cluster_public_fqdn_enabled
+  public_network_access_enabled       = local.kubernetes_cluster[each.key].public_network_access_enabled
+  role_based_access_control_enabled   = local.kubernetes_cluster[each.key].role_based_access_control_enabled
+  run_command_enabled                 = local.kubernetes_cluster[each.key].run_command_enabled
+  sku_tier                            = local.kubernetes_cluster[each.key].sku_tier
+  workload_identity_enabled           = local.kubernetes_cluster[each.key].workload_identity_enabled
+
+  default_node_pool {
+    name                          = local.kubernetes_cluster[each.key].default_node_pool.name
+    vm_size                       = local.kubernetes_cluster[each.key].default_node_pool.vm_size
+    capacity_reservation_group_id = local.kubernetes_cluster[each.key].default_node_pool.capacity_reservation_group_id
+    custom_ca_trust_enabled       = local.kubernetes_cluster[each.key].default_node_pool.custom_ca_trust_enabled
+    enable_auto_scaling           = local.kubernetes_cluster[each.key].default_node_pool.enable_auto_scaling
+    enable_host_encryption        = local.kubernetes_cluster[each.key].default_node_pool.enable_host_encryption
+    enable_node_public_ip         = local.kubernetes_cluster[each.key].default_node_pool.enable_node_public_ip
+    host_group_id                 = local.kubernetes_cluster[each.key].default_node_pool.host_group_id
+    fips_enabled                  = local.kubernetes_cluster[each.key].default_node_pool.fips_enabled
+    kubelet_disk_type             = local.kubernetes_cluster[each.key].default_node_pool.kubelet_disk_type
+    max_pods                      = local.kubernetes_cluster[each.key].default_node_pool.max_pods
+    message_of_the_day            = local.kubernetes_cluster[each.key].default_node_pool.message_of_the_day
+    node_public_ip_prefix_id      = local.kubernetes_cluster[each.key].default_node_pool.node_public_ip_prefix_id
+    node_labels                   = local.kubernetes_cluster[each.key].default_node_pool.node_labels
+    node_taints                   = local.kubernetes_cluster[each.key].default_node_pool.node_taints
+    only_critical_addons_enabled  = local.kubernetes_cluster[each.key].default_node_pool.only_critical_addons_enabled
+    orchestrator_version          = local.kubernetes_cluster[each.key].default_node_pool.orchestrator_version == null ? data.azurerm_kubernetes_service_versions.kubernetes_service_versions[each.key].latest_version : local.kubernetes_cluster[each.key].default_node_pool.orchestrator_version
+    os_disk_size_gb               = local.kubernetes_cluster[each.key].default_node_pool.os_disk_size_gb
+    os_disk_type                  = local.kubernetes_cluster[each.key].default_node_pool.os_disk_type
+    os_sku                        = local.kubernetes_cluster[each.key].default_node_pool.os_sku
+    pod_subnet_id                 = local.kubernetes_cluster[each.key].default_node_pool.pod_subnet_id
+    proximity_placement_group_id  = local.kubernetes_cluster[each.key].default_node_pool.proximity_placement_group_id
+    scale_down_mode               = local.kubernetes_cluster[each.key].default_node_pool.scale_down_mode
+    type                          = local.kubernetes_cluster[each.key].default_node_pool.type
+    ultra_ssd_enabled             = local.kubernetes_cluster[each.key].default_node_pool.ultra_ssd_enabled
+    vnet_subnet_id                = local.kubernetes_cluster[each.key].default_node_pool.vnet_subnet_id
+    max_count                     = local.kubernetes_cluster[each.key].default_node_pool.enable_auto_scaling == true ? local.kubernetes_cluster[each.key].default_node_pool.max_count : null
+    min_count                     = local.kubernetes_cluster[each.key].default_node_pool.enable_auto_scaling == true ? local.kubernetes_cluster[each.key].default_node_pool.min_count : null
+    node_count                    = local.kubernetes_cluster[each.key].default_node_pool.node_count
+    workload_runtime              = local.kubernetes_cluster[each.key].default_node_pool.enable_auto_scaling == false ? local.kubernetes_cluster[each.key].default_node_pool.workload_runtime : null
+    zones                         = local.kubernetes_cluster[each.key].default_node_pool.enable_auto_scaling == false ? local.kubernetes_cluster[each.key].default_node_pool.zones : null
+
+    dynamic "kubelet_config" {
+      for_each = length(compact(values(local.kubernetes_cluster[each.key].default_node_pool.kubelet_config))) == 0 ? [] : [1]
+
+      content {
+        allowed_unsafe_sysctls    = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config.allowed_unsafe_sysctls
+        container_log_max_line    = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config.container_log_max_line
+        container_log_max_size_mb = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config.container_log_max_size_mb
+        cpu_cfs_quota_enabled     = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config.cpu_cfs_quota_enabled
+        cpu_cfs_quota_period      = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config.cpu_cfs_quota_period
+        cpu_manager_policy        = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config.cpu_manager_policy
+        image_gc_high_threshold   = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config.image_gc_high_threshold
+        image_gc_low_threshold    = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config.image_gc_low_threshold
+        pod_max_pid               = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config.pod_max_pid
+        topology_manager_policy   = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config.topology_manager_policy
+      }
+    }
+
+    dynamic "linux_os_config" {
+      for_each = length(compact(
+        concat(
+          [
+            local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.swap_file_size_mb,
+            local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.transparent_huge_page_defrag,
+            local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.transparent_huge_page_enabled
+          ],
+        values(local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config))
+      )) == 0 ? [] : [1]
+
+      content {
+        swap_file_size_mb             = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.swap_file_size_mb
+        transparent_huge_page_defrag  = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.transparent_huge_page_defrag
+        transparent_huge_page_enabled = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.transparent_huge_page_enabled
+
+        dynamic "sysctl_config" {
+          for_each = length(compact(values(local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config))) == 0 ? [] : [1]
+
+          content {
+            fs_aio_max_nr                      = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.fs_aio_max_nr
+            fs_file_max                        = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.fs_file_max
+            fs_inotify_max_user_watches        = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.fs_inotify_max_user_watches
+            fs_nr_open                         = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.fs_nr_open
+            kernel_threads_max                 = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.kernel_threads_max
+            net_core_netdev_max_backlog        = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_core_netdev_max_backlog
+            net_core_optmem_max                = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_core_optmem_max
+            net_core_rmem_default              = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_core_rmem_default
+            net_core_rmem_max                  = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_core_rmem_max
+            net_core_somaxconn                 = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_core_somaxconn
+            net_core_wmem_default              = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_core_wmem_default
+            net_core_wmem_max                  = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_core_wmem_max
+            net_ipv4_ip_local_port_range_max   = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_ipv4_ip_local_port_range_max
+            net_ipv4_ip_local_port_range_min   = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_ipv4_ip_local_port_range_min
+            net_ipv4_neigh_default_gc_thresh1  = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_ipv4_neigh_default_gc_thresh1
+            net_ipv4_neigh_default_gc_thresh2  = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_ipv4_neigh_default_gc_thresh2
+            net_ipv4_neigh_default_gc_thresh3  = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_ipv4_neigh_default_gc_thresh3
+            net_ipv4_tcp_fin_timeout           = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_ipv4_tcp_fin_timeout
+            net_ipv4_tcp_keepalive_intvl       = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_ipv4_tcp_keepalive_intvl
+            net_ipv4_tcp_keepalive_probes      = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_ipv4_tcp_keepalive_probes
+            net_ipv4_tcp_keepalive_time        = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_ipv4_tcp_keepalive_time
+            net_ipv4_tcp_max_syn_backlog       = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_ipv4_tcp_max_syn_backlog
+            net_ipv4_tcp_max_tw_buckets        = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_ipv4_tcp_max_tw_buckets
+            net_ipv4_tcp_tw_reuse              = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_ipv4_tcp_tw_reuse
+            net_netfilter_nf_conntrack_buckets = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_netfilter_nf_conntrack_buckets
+            net_netfilter_nf_conntrack_max     = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.net_netfilter_nf_conntrack_max
+            vm_max_map_count                   = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.vm_max_map_count
+            vm_swappiness                      = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.vm_swappiness
+            vm_vfs_cache_pressure              = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.vm_vfs_cache_pressure
+          }
+        }
+      }
+    }
+
+    dynamic "node_network_profile" {
+      for_each = local.kubernetes_cluster[each.key].default_node_pool.node_network_profile == {} ? [] : [1]
+
+      content {
+        node_public_ip_tags = local.kubernetes_cluster[each.key].default_node_pool.node_network_profile.node_public_ip_tags
+      }
+    }
+
+    dynamic "upgrade_settings" {
+      for_each = local.kubernetes_cluster[each.key].default_node_pool.upgrade_settings == {} ? [] : [1]
+
+      content {
+        max_surge = local.kubernetes_cluster[each.key].default_node_pool.upgrade_settings.max_surge
+      }
+    }
+
+    tags = local.kubernetes_cluster[each.key].default_node_pool.tags
+  }
+
+  dynamic "aci_connector_linux" {
+    for_each = local.kubernetes_cluster[each.key].aci_connector_linux == {} ? [] : [1]
+
+    content {
+      subnet_name = local.kubernetes_cluster[each.key].aci_connector_linux.subnet_name
+    }
+  }
+
+  dynamic "api_server_access_profile" {
+    for_each = length(compact(values(local.kubernetes_cluster[each.key].api_server_access_profile))) == 0 ? [] : [1]
+
+    content {
+      authorized_ip_ranges     = local.kubernetes_cluster[each.key].api_server_access_profile.authorized_ip_ranges
+      subnet_id                = local.kubernetes_cluster[each.key].api_server_access_profile.subnet_id
+      vnet_integration_enabled = local.kubernetes_cluster[each.key].api_server_access_profile.vnet_integration_enabled
+    }
+  }
+
+  dynamic "auto_scaler_profile" {
+    for_each = length(compact(values(local.kubernetes_cluster[each.key].auto_scaler_profile))) == 0 ? [] : [1]
+
+    content {
+      balance_similar_node_groups      = local.kubernetes_cluster[each.key].auto_scaler_profile.balance_similar_node_groups
+      expander                         = local.kubernetes_cluster[each.key].auto_scaler_profile.expander
+      max_graceful_termination_sec     = local.kubernetes_cluster[each.key].auto_scaler_profile.max_graceful_termination_sec
+      max_node_provisioning_time       = local.kubernetes_cluster[each.key].auto_scaler_profile.max_node_provisioning_time
+      max_unready_nodes                = local.kubernetes_cluster[each.key].auto_scaler_profile.max_unready_nodes
+      max_unready_percentage           = local.kubernetes_cluster[each.key].auto_scaler_profile.max_unready_percentage
+      new_pod_scale_up_delay           = local.kubernetes_cluster[each.key].auto_scaler_profile.new_pod_scale_up_delay
+      scale_down_delay_after_add       = local.kubernetes_cluster[each.key].auto_scaler_profile.scale_down_delay_after_add
+      scale_down_delay_after_delete    = local.kubernetes_cluster[each.key].auto_scaler_profile.scale_down_delay_after_delete
+      scale_down_delay_after_failure   = local.kubernetes_cluster[each.key].auto_scaler_profile.scale_down_delay_after_failure
+      scan_interval                    = local.kubernetes_cluster[each.key].auto_scaler_profile.scan_interval
+      scale_down_unneeded              = local.kubernetes_cluster[each.key].auto_scaler_profile.scale_down_unneeded
+      scale_down_unready               = local.kubernetes_cluster[each.key].auto_scaler_profile.scale_down_unready
+      scale_down_utilization_threshold = local.kubernetes_cluster[each.key].auto_scaler_profile.scale_down_utilization_threshold
+      empty_bulk_delete_max            = local.kubernetes_cluster[each.key].auto_scaler_profile.empty_bulk_delete_max
+      skip_nodes_with_local_storage    = local.kubernetes_cluster[each.key].auto_scaler_profile.skip_nodes_with_local_storage
+      skip_nodes_with_system_pods      = local.kubernetes_cluster[each.key].auto_scaler_profile.skip_nodes_with_system_pods
+    }
+  }
+
+  dynamic "azure_active_directory_role_based_access_control" {
+    for_each = length(compact(values(local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control))) == 0 ? [] : [1]
+
+    content {
+      managed                = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.managed
+      tenant_id              = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.tenant_id
+      admin_group_object_ids = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.admin_group_object_ids
+      azure_rbac_enabled     = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.azure_rbac_enabled
+      client_app_id          = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.client_app_id
+      server_app_id          = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.server_app_id
+      server_app_secret      = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.server_app_secret
+    }
+  }
+
+  dynamic "confidential_computing" {
+    for_each = local.kubernetes_cluster[each.key].confidential_computing == {} ? [] : [1]
+
+    content {
+      sgx_quote_helper_enabled = local.kubernetes_cluster[each.key].confidential_computing.sgx_quote_helper_enabled
+    }
+  }
+
+  dynamic "http_proxy_config" {
+    for_each = length(compact(values(local.kubernetes_cluster[each.key].http_proxy_config))) == 0 ? [] : [1]
+
+    content {
+      http_proxy  = local.kubernetes_cluster[each.key].http_proxy_config.http_proxy
+      https_proxy = local.kubernetes_cluster[each.key].http_proxy_config.https_proxy
+      no_proxy    = local.kubernetes_cluster[each.key].http_proxy_config.no_proxy
+      trusted_ca  = local.kubernetes_cluster[each.key].http_proxy_config.trusted_ca
+    }
+  }
+
+  dynamic "identity" {
+    for_each = local.kubernetes_cluster[each.key].service_principal == {} ? [1] : []
+
+    content {
+      type         = local.kubernetes_cluster[each.key].identity.type
+      identity_ids = local.kubernetes_cluster[each.key].identity.identity_ids
+    }
+  }
+
+  dynamic "ingress_application_gateway" {
+    for_each = length(compact(values(local.kubernetes_cluster[each.key].ingress_application_gateway))) == 0 ? [] : [1]
+
+    content {
+      gateway_id   = local.kubernetes_cluster[each.key].ingress_application_gateway.gateway_id
+      gateway_name = local.kubernetes_cluster[each.key].ingress_application_gateway.gateway_name
+      subnet_cidr  = local.kubernetes_cluster[each.key].ingress_application_gateway.subnet_cidr
+      subnet_id    = local.kubernetes_cluster[each.key].ingress_application_gateway.subnet_id
+    }
+  }
+
+  dynamic "key_management_service" {
+    for_each = local.kubernetes_cluster[each.key].key_management_service.key_vault_key_id != "" ? [1] : []
+
+    content {
+      key_vault_key_id         = local.kubernetes_cluster[each.key].key_management_service.key_vault_key_id
+      key_vault_network_access = local.kubernetes_cluster[each.key].key_management_service.key_vault_network_access
+    }
+  }
+
+  dynamic "key_vault_secrets_provider" {
+    for_each = length(compact(values(local.kubernetes_cluster[each.key].key_vault_secrets_provider))) == 0 ? [] : [1]
+
+    content {
+      secret_rotation_enabled  = local.kubernetes_cluster[each.key].key_vault_secrets_provider.secret_rotation_enabled
+      secret_rotation_interval = local.kubernetes_cluster[each.key].key_vault_secrets_provider.secret_rotation_interval
+    }
+  }
+
+  dynamic "kubelet_identity" {
+    for_each = local.kubernetes_cluster[each.key].identity.type == "UserAssigned" ? [1] : []
+
+    content {
+      client_id                 = local.kubernetes_cluster[each.key].kubelet_identity.client_id
+      object_id                 = local.kubernetes_cluster[each.key].kubelet_identity.object_id
+      user_assigned_identity_id = local.kubernetes_cluster[each.key].kubelet_identity.user_assigned_identity_id
+    }
+  }
+
+  dynamic "linux_profile" {
+    for_each = local.kubernetes_cluster[each.key].linux_profile != {} ? [1] : []
+
+    content {
+      admin_username = local.kubernetes_cluster[each.key].linux_profile.admin_username
+      ssh_key {
+        key_data = local.kubernetes_cluster[each.key].linux_profile.ssh_key.key_data
+      }
+    }
+  }
+
+  dynamic "maintenance_window" {
+    for_each = local.kubernetes_cluster[each.key].maintenance_window.allowed != {} || local.kubernetes_cluster[each.key].maintenance_window.not_allowed != {} ? [1] : []
+
+    content {
+      allowed {
+        day   = local.kubernetes_cluster[each.key].maintenance_window.allowed.day
+        hours = local.kubernetes_cluster[each.key].maintenance_window.allowed.hours
+      }
+      not_allowed {
+        end   = local.kubernetes_cluster[each.key].maintenance_window.not_allowed.end
+        start = local.kubernetes_cluster[each.key].maintenance_window.not_allowed.start
+      }
+    }
+  }
+
+  dynamic "microsoft_defender" {
+    for_each = local.kubernetes_cluster[each.key].microsoft_defender != {} ? [1] : []
+
+    content {
+      log_analytics_workspace_id = local.kubernetes_cluster[each.key].microsoft_defender.log_analytics_workspace_id
+    }
+  }
+
+  dynamic "monitor_metrics" {
+    for_each = length(compact(values(local.kubernetes_cluster[each.key].monitor_metrics))) == 0 ? [] : [1]
+
+    content {
+      annotations_allowed = local.kubernetes_cluster[each.key].monitor_metrics.annotations_allowed
+      labels_allowed      = local.kubernetes_cluster[each.key].monitor_metrics.labels_allowed
+    }
+  }
+
+  dynamic "network_profile" {
+    for_each = local.kubernetes_cluster[each.key].network_profile.network_plugin != "kubenet" ? [1] : []
+
+    content {
+      network_plugin      = local.kubernetes_cluster[each.key].network_profile.network_plugin
+      network_mode        = local.kubernetes_cluster[each.key].network_profile.network_mode
+      network_policy      = local.kubernetes_cluster[each.key].network_profile.network_policy
+      dns_service_ip      = local.kubernetes_cluster[each.key].network_profile.dns_service_ip
+      docker_bridge_cidr  = local.kubernetes_cluster[each.key].network_profile.docker_bridge_cidr
+      ebpf_data_plane     = local.kubernetes_cluster[each.key].network_profile.ebpf_data_plane
+      network_plugin_mode = local.kubernetes_cluster[each.key].network_profile.network_plugin_mode
+      outbound_type       = local.kubernetes_cluster[each.key].network_profile.outbound_type
+      pod_cidr            = local.kubernetes_cluster[each.key].network_profile.pod_cidr
+      pod_cidrs           = local.kubernetes_cluster[each.key].network_profile.pod_cidrs
+      service_cidr        = local.kubernetes_cluster[each.key].network_profile.service_cidr
+      service_cidrs       = local.kubernetes_cluster[each.key].network_profile.service_cidrs
+      ip_versions         = local.kubernetes_cluster[each.key].network_profile.ip_versions
+      load_balancer_sku   = local.kubernetes_cluster[each.key].network_profile.load_balancer_sku
+
+      dynamic "load_balancer_profile" {
+        for_each = length(compact(values(local.kubernetes_cluster[each.key].network_profile.load_balancer_profile))) == 0 ? [] : [1]
+
+        content {
+          idle_timeout_in_minutes     = local.kubernetes_cluster[each.key].network_profile.load_balancer_profile.idle_timeout_in_minutes
+          managed_outbound_ip_count   = local.kubernetes_cluster[each.key].network_profile.load_balancer_profile.managed_outbound_ip_count
+          managed_outbound_ipv6_count = local.kubernetes_cluster[each.key].network_profile.load_balancer_profile.managed_outbound_ipv6_count
+          outbound_ip_address_ids     = local.kubernetes_cluster[each.key].network_profile.load_balancer_profile.outbound_ip_address_ids
+          outbound_ip_prefix_ids      = local.kubernetes_cluster[each.key].network_profile.load_balancer_profile.outbound_ip_prefix_ids
+          outbound_ports_allocated    = local.kubernetes_cluster[each.key].network_profile.load_balancer_profile.outbound_ports_allocated
+        }
+      }
+
+      dynamic "nat_gateway_profile" {
+        for_each = length(compact(values(local.kubernetes_cluster[each.key].network_profile.nat_gateway_profile))) == 0 ? [] : [1]
+
+        content {
+          idle_timeout_in_minutes   = local.kubernetes_cluster[each.key].network_profile.nat_gateway_profile.idle_timeout_in_minutes
+          managed_outbound_ip_count = local.kubernetes_cluster[each.key].network_profile.nat_gateway_profile.managed_outbound_ip_count
+        }
+      }
+    }
+  }
+
+  dynamic "oms_agent" {
+    for_each = local.kubernetes_cluster[each.key].oms_agent != {} ? [1] : []
+
+    content {
+      log_analytics_workspace_id = local.kubernetes_cluster[each.key].oms_agent.log_analytics_workspace_id
+    }
+  }
+
+  dynamic "workload_autoscaler_profile" {
+    for_each = length(compact(values(local.kubernetes_cluster[each.key].workload_autoscaler_profile))) == 0 ? [] : [1]
+
+    content {
+      keda_enabled = local.kubernetes_cluster[each.key].workload_autoscaler_profile.keda_enabled
+    }
+  }
+
+  dynamic "service_principal" {
+    for_each = local.kubernetes_cluster[each.key].service_principal != {} ? [1] : []
+
+    content {
+      client_id     = local.kubernetes_cluster[each.key].service_principal.client_id
+      client_secret = local.kubernetes_cluster[each.key].service_principal.client_secret
+    }
+  }
+
+  dynamic "storage_profile" {
+    for_each = length(compact(values(local.kubernetes_cluster[each.key].storage_profile))) == 0 ? [] : [1]
+
+    content {
+      blob_driver_enabled         = local.kubernetes_cluster[each.key].storage_profile.blob_driver_enabled
+      disk_driver_enabled         = local.kubernetes_cluster[each.key].storage_profile.disk_driver_enabled
+      disk_driver_version         = local.kubernetes_cluster[each.key].storage_profile.disk_driver_version
+      file_driver_enabled         = local.kubernetes_cluster[each.key].storage_profile.file_driver_enabled
+      snapshot_controller_enabled = local.kubernetes_cluster[each.key].storage_profile.snapshot_controller_enabled
+    }
+  }
+
+  dynamic "web_app_routing" {
+    for_each = local.kubernetes_cluster[each.key].web_app_routing != {} ? [1] : []
+
+    content {
+      dns_zone_id = local.kubernetes_cluster[each.key].web_app_routing.dns_zone_id
+    }
+  }
+
+  dynamic "windows_profile" {
+    for_each = local.kubernetes_cluster[each.key].windows_profile.admin_username != "" ? [1] : []
+
+    content {
+      admin_username = local.kubernetes_cluster[each.key].windows_profile.admin_username
+      admin_password = local.kubernetes_cluster[each.key].windows_profile.admin_password
+      license        = local.kubernetes_cluster[each.key].windows_profile.license
+
+      dynamic "gmsa" {
+        for_each = local.kubernetes_cluster[each.key].windows_profile.gmsa != {} ? [1] : []
+
+        content {
+          dns_server  = local.kubernetes_cluster[each.key].windows_profile.gmsa.dns_server
+          root_domain = local.kubernetes_cluster[each.key].windows_profile.gmsa.root_domain
+        }
+      }
+    }
+  }
+
+  tags = local.kubernetes_cluster[each.key].tags
+}
