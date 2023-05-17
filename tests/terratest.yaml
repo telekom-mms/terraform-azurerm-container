@@ -1,4 +1,6 @@
-functions: ["ContainerRegistryExists", "ContainerRegistryShow"]
+functions:
+  - ContainerRegistryExists
+  - ContainerRegistryShow
 options:
   ContainerRegistryShow:
     admin_enabled: false

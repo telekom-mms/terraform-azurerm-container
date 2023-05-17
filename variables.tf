@@ -6,17 +6,7 @@ variable "container_registry" {
 
 variable "kubernetes_cluster" {
   type = any
-  default = {
-    aks-mms = {
-      location            = "westeurope"
-      resource_group_name = "rg-mms-github"
-      default_node_pool = {
-        name            = "akspool"
-        vm_size         = "Standard_E4as_v4"
-        os_disk_size_gb = 60
-      }
-    }
-  }
+  default = {}
   description = "Resource definition, default settings are defined within locals and merged with var settings. For more information look at [Outputs](#Outputs)."
 }
 
@@ -71,7 +61,7 @@ locals {
       name                                = ""
       dns_prefix                          = null
       dns_prefix_private_cluster          = null
-      automatic_channel_upgrade           = "stable" /** latest patch version -1 */
+      automatic_channel_upgrade           = "stable" // latest patch version -1
       azure_policy_enabled                = null
       disk_encryption_set_id              = null
       edge_zone                           = null
@@ -89,7 +79,7 @@ locals {
       public_network_access_enabled       = null
       role_based_access_control_enabled   = true
       run_command_enabled                 = null
-      sku_tier                            = null
+      sku_tier                            = "Standard"
       workload_identity_enabled           = null
       default_node_pool = {
         capacity_reservation_group_id = null
@@ -115,7 +105,6 @@ locals {
         scale_down_mode               = null
         type                          = "VirtualMachineScaleSets"
         ultra_ssd_enabled             = null
-        vnet_subnet_id                = null
         max_count                     = 10
         min_count                     = 2
         node_count                    = 2
