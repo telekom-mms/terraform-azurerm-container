@@ -5,8 +5,8 @@ variable "container_registry" {
 }
 
 variable "kubernetes_cluster" {
-  type = any
-  default = {}
+  type        = any
+  default     = {}
   description = "Resource definition, default settings are defined within locals and merged with var settings. For more information look at [Outputs](#Outputs)."
 }
 

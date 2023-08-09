@@ -170,7 +170,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     zones                         = local.kubernetes_cluster[each.key].default_node_pool.enable_auto_scaling == false ? local.kubernetes_cluster[each.key].default_node_pool.zones : null
 
     dynamic "kubelet_config" {
-      for_each = length(compact(values(local.kubernetes_cluster[each.key].default_node_pool.kubelet_config))) == 0 ? [] : [0]
+      for_each = length(compact(flatten(values(local.kubernetes_cluster[each.key].default_node_pool.kubelet_config)))) == 0 ? [] : [0]
 
       content {
         allowed_unsafe_sysctls    = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config.allowed_unsafe_sysctls
@@ -187,7 +187,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     }
 
     dynamic "linux_os_config" {
-      for_each = length(compact(
+      for_each = length(compact(flatten(
         concat(
           [
             local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.swap_file_size_mb,
@@ -195,7 +195,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
             local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.transparent_huge_page_enabled
           ],
         values(local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config))
-      )) == 0 ? [] : [0]
+      ))) == 0 ? [] : [0]
 
       content {
         swap_file_size_mb             = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.swap_file_size_mb
@@ -268,7 +268,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   }
 
   dynamic "api_server_access_profile" {
-    for_each = length(compact(values(local.kubernetes_cluster[each.key].api_server_access_profile))) == 0 ? [] : [0]
+    for_each = length(compact(flatten(values(local.kubernetes_cluster[each.key].api_server_access_profile)))) == 0 ? [] : [0]
 
     content {
       authorized_ip_ranges     = local.kubernetes_cluster[each.key].api_server_access_profile.authorized_ip_ranges
@@ -302,7 +302,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   }
 
   dynamic "azure_active_directory_role_based_access_control" {
-    for_each = length(compact(values(local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control))) == 0 ? [] : [0]
+    for_each = length(compact(flatten(values(local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control)))) == 0 ? [] : [0]
 
     content {
       managed                = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.managed
@@ -445,7 +445,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
       load_balancer_sku   = local.kubernetes_cluster[each.key].network_profile.load_balancer_sku
 
       dynamic "load_balancer_profile" {
-        for_each = length(compact(values(local.kubernetes_cluster[each.key].network_profile.load_balancer_profile))) == 0 ? [] : [0]
+        for_each = length(compact(flatten(values(local.kubernetes_cluster[each.key].network_profile.load_balancer_profile)))) == 0 ? [] : [0]
 
         content {
           idle_timeout_in_minutes     = local.kubernetes_cluster[each.key].network_profile.load_balancer_profile.idle_timeout_in_minutes
