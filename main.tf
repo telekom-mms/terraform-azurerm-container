@@ -113,8 +113,8 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   name                                = local.kubernetes_cluster[each.key].name == "" ? each.key : local.kubernetes_cluster[each.key].name
   location                            = local.kubernetes_cluster[each.key].location
   resource_group_name                 = local.kubernetes_cluster[each.key].resource_group_name
-  dns_prefix                          = merge(local.kubernetes_cluster[each.key].dns_prefix, local.kubernetes_cluster[each.key].dns_prefix_private_cluster) == {} ? each.key : local.kubernetes_cluster[each.key].dns_prefix
-  dns_prefix_private_cluster          = local.kubernetes_cluster[each.key].dns_prefix_private_cluster
+  dns_prefix                          = local.kubernetes_cluster[each.key].dns_prefix_private_cluster != null ? null : local.kubernetes_cluster[each.key].dns_prefix
+  dns_prefix_private_cluster          = local.kubernetes_cluster[each.key].dns_prefix_private_cluster != null ? local.kubernetes_cluster[each.key].dns_prefix_private_cluster : null
   automatic_channel_upgrade           = local.kubernetes_cluster[each.key].automatic_channel_upgrade
   azure_policy_enabled                = local.kubernetes_cluster[each.key].azure_policy_enabled
   disk_encryption_set_id              = local.kubernetes_cluster[each.key].disk_encryption_set_id
