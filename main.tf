@@ -168,6 +168,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     node_count                    = local.kubernetes_cluster[each.key].default_node_pool.node_count
     workload_runtime              = local.kubernetes_cluster[each.key].default_node_pool.enable_auto_scaling == false ? local.kubernetes_cluster[each.key].default_node_pool.workload_runtime : null
     zones                         = local.kubernetes_cluster[each.key].default_node_pool.enable_auto_scaling == false ? local.kubernetes_cluster[each.key].default_node_pool.zones : null
+    temporary_name_for_rotation   = local.kubernetes_cluster[each.key].default_node_pool.temporary_name_for_rotation
 
     dynamic "kubelet_config" {
       for_each = length(compact(flatten(values(local.kubernetes_cluster[each.key].default_node_pool.kubelet_config)))) == 0 ? [] : [0]
