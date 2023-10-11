@@ -5,8 +5,8 @@ variable "container_registry" {
 }
 
 variable "kubernetes_cluster" {
-  type = any
-  default = {}
+  type        = any
+  default     = {}
   description = "Resource definition, default settings are defined within locals and merged with var settings. For more information look at [Outputs](#Outputs)."
 }
 
@@ -110,6 +110,7 @@ locals {
         node_count                    = 2
         workload_runtime              = null
         zones                         = [1, 2, 3]
+        temporary_name_for_rotation   = "tmppool"
         kubelet_config = {
           allowed_unsafe_sysctls    = null
           container_log_max_line    = null
