@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.3](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.3) (2023-07-12)
+
+[Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.2...1.0.3)
+
+**Fixed bugs:**
+
+- fix failure for merge loop on network rules [\#38](https://github.com/telekom-mms/terraform-azurerm-container/pull/38) ([michaelamattes](https://github.com/michaelamattes))
+
+**Merged pull requests:**
+
+- add codespell workflow [\#37](https://github.com/telekom-mms/terraform-azurerm-container/pull/37) ([michaelamattes](https://github.com/michaelamattes))
+
 ## [1.0.2](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.2) (2023-05-10)
 
 [Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.1...1.0.2)

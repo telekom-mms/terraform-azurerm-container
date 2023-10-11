@@ -16,7 +16,6 @@ module "network" {
   }
 }
 
-
 module "container" {
   source = "registry.terraform.io/telekom-mms/container/azurerm"
   container_registry = {
@@ -24,6 +23,18 @@ module "container" {
       location            = "westeurope"
       resource_group_name = "rg-mms-github"
       sku                 = "Premium"
+      network_rule_set = {
+        ip_rule = {
+          proxy = {
+            ip_range = "172.0.0.2/32"
+          }
+        }
+        virtual_network = {
+          module.network.subnet["snet-app-mms"].name = {
+            subnet_id = module.network.subnet["snet-app-mms"].id
+          }
+        }
+      }
       tags = {
         project     = "mms-github"
         environment = terraform.workspace

@@ -315,7 +315,7 @@ locals {
             for subconfig in ["ip_rule", "virtual_network"] :
             subconfig => {
               for key in keys(lookup(local.container_registry_values[container_registry][config], subconfig, {})) :
-              key => keys(local.container_registry_values[container_registry][config][subconfig]) == keys(local.default.container_registry[config][subconfig]) ? {} : merge(local.default.container_registry[config][subconfig], local.container_registry_values[container_registry][config][subconfig][key])
+              key => keys(local.container_registry_values[container_registry][config][subconfig]) == keys(local.default.container_registry[config][subconfig]) ? {} : merge(local.default.container_registry[config][subconfig], local.container_registry_values[container_registry].network_rule_set[subconfig][key])
             }
           }
         )
