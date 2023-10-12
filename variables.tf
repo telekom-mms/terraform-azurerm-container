@@ -63,6 +63,7 @@ locals {
       dns_prefix_private_cluster          = null
       automatic_channel_upgrade           = "stable" // latest patch version -1
       azure_policy_enabled                = null
+      custom_ca_trust_certificates_base64 = null
       disk_encryption_set_id              = null
       edge_zone                           = null
       http_application_routing_enabled    = null
@@ -70,6 +71,7 @@ locals {
       image_cleaner_interval_hours        = null
       kubernetes_version                  = null
       local_account_disabled              = null
+      node_os_channel_upgrade             = null
       node_resource_group                 = null
       oidc_issuer_enabled                 = null
       open_service_mesh_enabled           = null
@@ -103,6 +105,7 @@ locals {
         pod_subnet_id                 = null
         proximity_placement_group_id  = null
         scale_down_mode               = null
+        snapshot_id                   = null
         type                          = "VirtualMachineScaleSets"
         ultra_ssd_enabled             = null
         max_count                     = 10
@@ -232,6 +235,22 @@ locals {
         allowed     = {}
         not_allowed = {}
       }
+      maintenance_window_auto_upgrade = {
+        day_of_week = null
+        week_index  = null
+        start_time  = null
+        utc_offset  = null
+        start_date  = null
+        not_allowed = {}
+      }
+      maintenance_window_node_os = {
+        day_of_week = null
+        week_index  = null
+        start_time  = null
+        utc_offset  = null
+        start_date  = null
+        not_allowed = {}
+      }
       microsoft_defender = {}
       monitor_metrics = {
         annotations_allowed = null
@@ -242,7 +261,6 @@ locals {
         network_mode        = null
         network_policy      = "azure"
         dns_service_ip      = null
-        docker_bridge_cidr  = null
         ebpf_data_plane     = null
         network_plugin_mode = null
         outbound_type       = "loadBalancer"
@@ -265,9 +283,12 @@ locals {
           managed_outbound_ip_count = null
         }
       }
-      oms_agent = {}
+      oms_agent = {
+        msi_auth_for_monitoring_enabled = null
+      }
       workload_autoscaler_profile = {
-        keda_enabled = null
+        keda_enabled                    = null
+        vertical_pod_autoscaler_enabled = null
       }
       service_principal = {}
       storage_profile = {
@@ -355,8 +376,18 @@ locals {
         config => merge(
           merge(local.default.kubernetes_cluster[config], local.kubernetes_cluster_values[kubernetes_cluster][config]),
           {
-            for subconfig in ["kubelet_config", "linux_os_config", "node_network_profile", "upgrade_settings"] :
+            for subconfig in ["kubelet_config", "node_network_profile", "upgrade_settings"] :
             subconfig => merge(local.default.kubernetes_cluster[config][subconfig], lookup(local.kubernetes_cluster_values[kubernetes_cluster][config], subconfig, {}))
+          },
+          {
+            for subconfig in ["linux_os_config"] :
+            subconfig => merge(
+              merge(local.default.kubernetes_cluster[config][subconfig], lookup(local.kubernetes_cluster_values[kubernetes_cluster][config], subconfig, {})),
+              {
+                for subsubconfig in ["sysctl_config"] :
+                subsubconfig => merge(local.default.kubernetes_cluster[config][subconfig][subsubconfig], lookup(local.kubernetes_cluster_values[kubernetes_cluster][config][subconfig], subsubconfig, {}))
+              }
+            )
           }
         )
       },
@@ -376,6 +407,16 @@ locals {
           merge(local.default.kubernetes_cluster[config], local.kubernetes_cluster_values[kubernetes_cluster][config]),
           {
             for subconfig in ["gmsa"] :
+            subconfig => merge(local.default.kubernetes_cluster[config][subconfig], lookup(local.kubernetes_cluster_values[kubernetes_cluster][config], subconfig, {}))
+          }
+        )
+      },
+      {
+        for config in ["maintenance_window_auto_upgrade", "maintenance_window_node_os"] :
+        config => merge(
+          merge(local.default.kubernetes_cluster[config], local.kubernetes_cluster_values[kubernetes_cluster][config]),
+          {
+            for subconfig in ["not_allowed"] :
             subconfig => merge(local.default.kubernetes_cluster[config][subconfig], lookup(local.kubernetes_cluster_values[kubernetes_cluster][config], subconfig, {}))
           }
         )

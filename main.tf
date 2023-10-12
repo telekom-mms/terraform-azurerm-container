@@ -113,10 +113,11 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   name                                = local.kubernetes_cluster[each.key].name == "" ? each.key : local.kubernetes_cluster[each.key].name
   location                            = local.kubernetes_cluster[each.key].location
   resource_group_name                 = local.kubernetes_cluster[each.key].resource_group_name
-  dns_prefix                          = local.kubernetes_cluster[each.key].dns_prefix_private_cluster != null ? null : local.kubernetes_cluster[each.key].dns_prefix
+  dns_prefix                          = local.kubernetes_cluster[each.key].dns_prefix != null ? local.kubernetes_cluster[each.key].dns_prefix : null
   dns_prefix_private_cluster          = local.kubernetes_cluster[each.key].dns_prefix_private_cluster != null ? local.kubernetes_cluster[each.key].dns_prefix_private_cluster : null
   automatic_channel_upgrade           = local.kubernetes_cluster[each.key].automatic_channel_upgrade
   azure_policy_enabled                = local.kubernetes_cluster[each.key].azure_policy_enabled
+  custom_ca_trust_certificates_base64 = local.kubernetes_cluster[each.key].custom_ca_trust_certificates_base64
   disk_encryption_set_id              = local.kubernetes_cluster[each.key].disk_encryption_set_id
   edge_zone                           = local.kubernetes_cluster[each.key].edge_zone
   http_application_routing_enabled    = local.kubernetes_cluster[each.key].http_application_routing_enabled
@@ -124,13 +125,13 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   image_cleaner_interval_hours        = local.kubernetes_cluster[each.key].image_cleaner_interval_hours
   kubernetes_version                  = local.kubernetes_cluster[each.key].kubernetes_version == null ? data.azurerm_kubernetes_service_versions.kubernetes_service_versions[each.key].latest_version : local.kubernetes_cluster[each.key].kubernetes_version
   local_account_disabled              = local.kubernetes_cluster[each.key].local_account_disabled
+  node_os_channel_upgrade             = local.kubernetes_cluster[each.key].node_os_channel_upgrade
   node_resource_group                 = local.kubernetes_cluster[each.key].node_resource_group
   oidc_issuer_enabled                 = local.kubernetes_cluster[each.key].oidc_issuer_enabled
   open_service_mesh_enabled           = local.kubernetes_cluster[each.key].open_service_mesh_enabled
   private_cluster_enabled             = local.kubernetes_cluster[each.key].private_cluster_enabled
   private_dns_zone_id                 = local.kubernetes_cluster[each.key].private_dns_zone_id
   private_cluster_public_fqdn_enabled = local.kubernetes_cluster[each.key].private_cluster_public_fqdn_enabled
-  public_network_access_enabled       = local.kubernetes_cluster[each.key].public_network_access_enabled
   role_based_access_control_enabled   = local.kubernetes_cluster[each.key].role_based_access_control_enabled
   run_command_enabled                 = local.kubernetes_cluster[each.key].run_command_enabled
   sku_tier                            = local.kubernetes_cluster[each.key].sku_tier
@@ -160,6 +161,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     pod_subnet_id                 = local.kubernetes_cluster[each.key].default_node_pool.pod_subnet_id
     proximity_placement_group_id  = local.kubernetes_cluster[each.key].default_node_pool.proximity_placement_group_id
     scale_down_mode               = local.kubernetes_cluster[each.key].default_node_pool.scale_down_mode
+    snapshot_id                   = local.kubernetes_cluster[each.key].default_node_pool.snapshot_id
     type                          = local.kubernetes_cluster[each.key].default_node_pool.type
     ultra_ssd_enabled             = local.kubernetes_cluster[each.key].default_node_pool.ultra_ssd_enabled
     vnet_subnet_id                = local.kubernetes_cluster[each.key].network_profile.network_plugin == "azure" ? local.kubernetes_cluster[each.key].default_node_pool.vnet_subnet_id : null
@@ -171,7 +173,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     temporary_name_for_rotation   = local.kubernetes_cluster[each.key].default_node_pool.temporary_name_for_rotation
 
     dynamic "kubelet_config" {
-      for_each = length(compact(flatten(values(local.kubernetes_cluster[each.key].default_node_pool.kubelet_config)))) == 0 ? [] : [0]
+      for_each = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config == {} ? [] : [0]
 
       content {
         allowed_unsafe_sysctls    = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config.allowed_unsafe_sysctls
@@ -188,15 +190,8 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     }
 
     dynamic "linux_os_config" {
-      for_each = length(compact(flatten(
-        concat(
-          [
-            local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.swap_file_size_mb,
-            local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.transparent_huge_page_defrag,
-            local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.transparent_huge_page_enabled
-          ],
-        values(local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config))
-      ))) == 0 ? [] : [0]
+      for_each = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config == {} ? [] : [0]
+
 
       content {
         swap_file_size_mb             = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.swap_file_size_mb
@@ -395,16 +390,75 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   }
 
   dynamic "maintenance_window" {
-    for_each = local.kubernetes_cluster[each.key].maintenance_window.allowed != {} || local.kubernetes_cluster[each.key].maintenance_window.not_allowed != {} ? [0] : []
+    for_each = length(local.kubernetes_cluster[each.key].maintenance_window) == 0 ? [] : [0]
 
     content {
-      allowed {
-        day   = local.kubernetes_cluster[each.key].maintenance_window.allowed.day
-        hours = local.kubernetes_cluster[each.key].maintenance_window.allowed.hours
+
+      dynamic "allowed" {
+        for_each = local.kubernetes_cluster[each.key].maintenance_window.allowed
+
+        content {
+          day   = local.kubernetes_cluster[each.key].maintenance_window.allowed[allowed.key].day
+          hours = local.kubernetes_cluster[each.key].maintenance_window.allowed[allowed.key].hours
+        }
       }
-      not_allowed {
-        end   = local.kubernetes_cluster[each.key].maintenance_window.not_allowed.end
-        start = local.kubernetes_cluster[each.key].maintenance_window.not_allowed.start
+
+      dynamic "not_allowed" {
+        for_each = local.kubernetes_cluster[each.key].maintenance_window.not_allowed
+
+        content {
+          end   = local.kubernetes_cluster[each.key].maintenance_window.not_allowed[not_allowed.key].end
+          start = local.kubernetes_cluster[each.key].maintenance_window.not_allowed[not_allowed.key].start
+        }
+      }
+    }
+  }
+
+  dynamic "maintenance_window_auto_upgrade" {
+    for_each = length(compact([for key in setsubtract(keys(local.kubernetes_cluster[each.key].maintenance_window_auto_upgrade), ["not_allowed"]) : local.kubernetes_cluster[each.key].maintenance_window_auto_upgrade[key]])) == 0 ? [] : [0]
+
+    content {
+      frequency   = local.kubernetes_cluster[each.key].maintenance_window_auto_upgrade.frequency
+      interval    = local.kubernetes_cluster[each.key].maintenance_window_auto_upgrade.interval
+      duration    = local.kubernetes_cluster[each.key].maintenance_window_auto_upgrade.duration
+      day_of_week = local.kubernetes_cluster[each.key].maintenance_window_auto_upgrade.day_of_week
+      week_index  = local.kubernetes_cluster[each.key].maintenance_window_auto_upgrade.week_index
+      start_time  = local.kubernetes_cluster[each.key].maintenance_window_auto_upgrade.start_time
+      utc_offset  = local.kubernetes_cluster[each.key].maintenance_window_auto_upgrade.utc_offset
+      start_date  = local.kubernetes_cluster[each.key].maintenance_window_auto_upgrade.start_date
+
+      dynamic "not_allowed" {
+        for_each = local.kubernetes_cluster[each.key].maintenance_window_auto_upgrade.not_allowed
+
+        content {
+          end   = local.kubernetes_cluster[each.key].maintenance_window_auto_upgrade.not_allowed[not_allowed.key].end
+          start = local.kubernetes_cluster[each.key].maintenance_window_auto_upgrade.not_allowed[not_allowed.key].start
+        }
+      }
+    }
+  }
+
+  dynamic "maintenance_window_node_os" {
+    for_each = length(compact([for key in setsubtract(keys(local.kubernetes_cluster[each.key].maintenance_window_node_os), ["not_allowed"]) : local.kubernetes_cluster[each.key].maintenance_window_node_os[key]])) == 0 ? [] : [0]
+
+
+    content {
+      frequency   = local.kubernetes_cluster[each.key].maintenance_window_node_os.frequency
+      interval    = local.kubernetes_cluster[each.key].maintenance_window_node_os.interval
+      duration    = local.kubernetes_cluster[each.key].maintenance_window_node_os.duration
+      day_of_week = local.kubernetes_cluster[each.key].maintenance_window_node_os.day_of_week
+      week_index  = local.kubernetes_cluster[each.key].maintenance_window_node_os.week_index
+      start_time  = local.kubernetes_cluster[each.key].maintenance_window_node_os.start_time
+      utc_offset  = local.kubernetes_cluster[each.key].maintenance_window_node_os.utc_offset
+      start_date  = local.kubernetes_cluster[each.key].maintenance_window_node_os.start_date
+
+      dynamic "not_allowed" {
+        for_each = local.kubernetes_cluster[each.key].maintenance_window_node_os.not_allowed
+
+        content {
+          end   = local.kubernetes_cluster[each.key].maintenance_window_node_os.not_allowed[not_allowed.key].end
+          start = local.kubernetes_cluster[each.key].maintenance_window_node_os.not_allowed[not_allowed.key].start
+        }
       }
     }
   }
@@ -434,7 +488,6 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
       network_mode        = local.kubernetes_cluster[each.key].network_profile.network_mode
       network_policy      = local.kubernetes_cluster[each.key].network_profile.network_policy
       dns_service_ip      = local.kubernetes_cluster[each.key].network_profile.dns_service_ip
-      docker_bridge_cidr  = local.kubernetes_cluster[each.key].network_profile.docker_bridge_cidr
       ebpf_data_plane     = local.kubernetes_cluster[each.key].network_profile.ebpf_data_plane
       network_plugin_mode = local.kubernetes_cluster[each.key].network_profile.network_plugin_mode
       outbound_type       = local.kubernetes_cluster[each.key].network_profile.outbound_type
@@ -470,10 +523,11 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   }
 
   dynamic "oms_agent" {
-    for_each = local.kubernetes_cluster[each.key].oms_agent != {} ? [0] : []
+    for_each = length(compact(values(local.kubernetes_cluster[each.key].oms_agent))) == 0 ? [] : [0]
 
     content {
-      log_analytics_workspace_id = local.kubernetes_cluster[each.key].oms_agent.log_analytics_workspace_id
+      log_analytics_workspace_id      = local.kubernetes_cluster[each.key].oms_agent.log_analytics_workspace_id
+      msi_auth_for_monitoring_enabled = local.kubernetes_cluster[each.key].oms_agent.msi_auth_for_monitoring_enabled
     }
   }
 
@@ -481,7 +535,8 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     for_each = length(compact(values(local.kubernetes_cluster[each.key].workload_autoscaler_profile))) == 0 ? [] : [0]
 
     content {
-      keda_enabled = local.kubernetes_cluster[each.key].workload_autoscaler_profile.keda_enabled
+      keda_enabled                    = local.kubernetes_cluster[each.key].workload_autoscaler_profile.keda_enabled
+      vertical_pod_autoscaler_enabled = local.kubernetes_cluster[each.key].workload_autoscaler_profile.vertical_pod_autoscaler_enabled
     }
   }
 

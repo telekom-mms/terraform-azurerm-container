@@ -1,6 +1,5 @@
 module "network" {
   source = "registry.terraform.io/telekom-mms/network/azurerm"
-  version = "3.1.0"
   virtual_network = {
     vn-app-mms = {
       location            = "westeurope"
@@ -29,6 +28,7 @@ module "container" {
     aksmms = {
       location            = "westeurope"
       resource_group_name = "rg-mms-github"
+      dns_prefix          = "mms"
       default_node_pool = {
         name            = "main"
         vm_size         = "Standard_DS2_v2"
