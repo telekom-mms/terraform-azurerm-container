@@ -28,6 +28,7 @@ module "container" {
     aksmms = {
       location            = "westeurope"
       resource_group_name = "rg-mms-github"
+      dns_prefix          = "mms"
       default_node_pool = {
         name            = "main"
         vm_size         = "Standard_DS2_v2"
