@@ -383,7 +383,7 @@ locals {
             for subconfig in ["linux_os_config"] :
             subconfig => merge(
               merge(local.default.kubernetes_cluster[config][subconfig], lookup(local.kubernetes_cluster_values[kubernetes_cluster][config], subconfig, {})),
-              {
+              lookup(var.kubernetes_cluster[kubernetes_cluster][config], subconfig, {}) == {} ? {} : {
                 for subsubconfig in ["sysctl_config"] :
                 subsubconfig => merge(local.default.kubernetes_cluster[config][subconfig][subsubconfig], lookup(local.kubernetes_cluster_values[kubernetes_cluster][config][subconfig], subsubconfig, {}))
               }

@@ -390,12 +390,12 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   }
 
   dynamic "maintenance_window" {
-    for_each = length(local.kubernetes_cluster[each.key].maintenance_window) == 0 ? [] : [0]
+    for_each = length(setsubtract(values(local.kubernetes_cluster[each.key].maintenance_window), [{}])) == 0 ? [] : [0]
 
     content {
 
       dynamic "allowed" {
-        for_each = local.kubernetes_cluster[each.key].maintenance_window.allowed
+        for_each = keys(local.kubernetes_cluster[each.key].maintenance_window.allowed) == [] ? {} : local.kubernetes_cluster[each.key].maintenance_window.allowed
 
         content {
           day   = local.kubernetes_cluster[each.key].maintenance_window.allowed[allowed.key].day
@@ -404,7 +404,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
       }
 
       dynamic "not_allowed" {
-        for_each = local.kubernetes_cluster[each.key].maintenance_window.not_allowed
+        for_each = keys(local.kubernetes_cluster[each.key].maintenance_window.not_allowed) == [] ? {} : local.kubernetes_cluster[each.key].maintenance_window.not_allowed
 
         content {
           end   = local.kubernetes_cluster[each.key].maintenance_window.not_allowed[not_allowed.key].end
