@@ -1,20 +1,7 @@
 functions:
   - ContainerRegistryExists
   - ContainerRegistryShow
-  - KubernetesClusterExists
-  - KubernetesClusterShow
 options:
   ContainerRegistryShow:
     admin_enabled: false
     network_rule_bypass_option: None
-  KubernetesClusterShow:
-    sku_tier: Standard
-    default_node_pool:
-      os_disk_type: Ephemeral
-      os_sku: Ubuntu
-      type: VirtualMachineScaleSets
-    network_profile:
-      network_plugin: azure
-      network_policy: azure
-      outbound_type: loadBalancer
-      load_balancer_sku: standard

@@ -395,20 +395,20 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     content {
 
       dynamic "allowed" {
-        for_each = keys(local.kubernetes_cluster[each.key].maintenance_window.allowed) == [] ? {} : local.kubernetes_cluster[each.key].maintenance_window.allowed
+        for_each = length(keys(local.kubernetes_cluster[each.key].maintenance_window.allowed)) > 0 ? keys(local.kubernetes_cluster[each.key].maintenance_window.allowed) : []
 
         content {
-          day   = local.kubernetes_cluster[each.key].maintenance_window.allowed[allowed.key].day
-          hours = local.kubernetes_cluster[each.key].maintenance_window.allowed[allowed.key].hours
+          day   = local.kubernetes_cluster[each.key].maintenance_window.allowed[allowed.value].day
+          hours = local.kubernetes_cluster[each.key].maintenance_window.allowed[allowed.value].hours
         }
       }
 
       dynamic "not_allowed" {
-        for_each = keys(local.kubernetes_cluster[each.key].maintenance_window.not_allowed) == [] ? {} : local.kubernetes_cluster[each.key].maintenance_window.not_allowed
+        for_each = length(keys(local.kubernetes_cluster[each.key].maintenance_window.not_allowed)) > 0 ? keys(local.kubernetes_cluster[each.key].maintenance_window.not_allowed) : []
 
         content {
-          end   = local.kubernetes_cluster[each.key].maintenance_window.not_allowed[not_allowed.key].end
-          start = local.kubernetes_cluster[each.key].maintenance_window.not_allowed[not_allowed.key].start
+          end   = local.kubernetes_cluster[each.key].maintenance_window.not_allowed[not_allowed.value].end
+          start = local.kubernetes_cluster[each.key].maintenance_window.not_allowed[not_allowed.value].start
         }
       }
     }
