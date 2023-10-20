@@ -259,7 +259,7 @@ locals {
       network_profile = {
         network_plugin      = "azure"
         network_mode        = null
-        network_policy      = "azure"
+        network_policy      = "azure" // also enables network_policy terrascan policiy AC_AZURE_0158
         dns_service_ip      = null
         ebpf_data_plane     = null
         network_plugin_mode = null

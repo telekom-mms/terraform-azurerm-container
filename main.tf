@@ -484,8 +484,9 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     for_each = local.kubernetes_cluster[each.key].network_profile.network_plugin == "kubenet" ? [] : [0]
 
     content {
-      network_plugin      = local.kubernetes_cluster[each.key].network_profile.network_plugin
-      network_mode        = local.kubernetes_cluster[each.key].network_profile.network_mode
+      network_plugin = local.kubernetes_cluster[each.key].network_profile.network_plugin
+      network_mode   = local.kubernetes_cluster[each.key].network_profile.network_mode
+      #ts:skip=AC_AZURE_0158 terrascan - enabled over local default setting
       network_policy      = local.kubernetes_cluster[each.key].network_profile.network_policy
       dns_service_ip      = local.kubernetes_cluster[each.key].network_profile.dns_service_ip
       ebpf_data_plane     = local.kubernetes_cluster[each.key].network_profile.ebpf_data_plane
