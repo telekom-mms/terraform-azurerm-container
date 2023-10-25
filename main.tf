@@ -173,7 +173,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     temporary_name_for_rotation   = local.kubernetes_cluster[each.key].default_node_pool.temporary_name_for_rotation
 
     dynamic "kubelet_config" {
-      for_each = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config == {} ? [] : [0]
+      for_each = length(compact(values(local.kubernetes_cluster[each.key].default_node_pool.kubelet_config))) > 0 ? [0] : []
 
       content {
         allowed_unsafe_sysctls    = local.kubernetes_cluster[each.key].default_node_pool.kubelet_config.allowed_unsafe_sysctls
@@ -190,8 +190,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     }
 
     dynamic "linux_os_config" {
-      for_each = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config == {} ? [] : [0]
-
+      for_each = length(compact(concat([for key in setsubtract(keys(local.kubernetes_cluster[each.key].default_node_pool.linux_os_config), ["sysctl_config"]) : local.kubernetes_cluster[each.key].default_node_pool.linux_os_config[key]], values(local.kubernetes_cluster[each.key].default_node_pool.linux_os_config["sysctl_config"])))) > 0 ? [0] : []
 
       content {
         swap_file_size_mb             = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.swap_file_size_mb
@@ -199,7 +198,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
         transparent_huge_page_enabled = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.transparent_huge_page_enabled
 
         dynamic "sysctl_config" {
-          for_each = length(compact(values(local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config))) == 0 ? [] : [0]
+          for_each = length(compact(values(local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config))) > 0 ? [0] : []
 
           content {
             fs_aio_max_nr                      = local.kubernetes_cluster[each.key].default_node_pool.linux_os_config.sysctl_config.fs_aio_max_nr
