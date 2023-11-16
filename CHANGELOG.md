@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.0.5](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.5) (2023-11-16)
+
+[Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.4...1.0.5)
+
+**Implemented enhancements:**
+
+- \[Enhancement\] add option node\_os\_channel\_upgrade to variables [\#40](https://github.com/telekom-mms/terraform-azurerm-container/issues/40)
+
+## [1.0.4](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.4) (2023-10-25)
+
+[Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.3...1.0.4)
+
+**Implemented enhancements:**
+
+- add kubernets\_cluster resource [\#42](https://github.com/telekom-mms/terraform-azurerm-container/pull/42) ([michaelamattes](https://github.com/michaelamattes))
+
+**Merged pull requests:**
+
+- Fixes for aks cluster [\#41](https://github.com/telekom-mms/terraform-azurerm-container/pull/41) ([habr-mms](https://github.com/habr-mms))
+- fix code style failures [\#39](https://github.com/telekom-mms/terraform-azurerm-container/pull/39) ([michaelamattes](https://github.com/michaelamattes))
+
 ## [1.0.3](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.3) (2023-07-12)
 
 [Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.2...1.0.3)
