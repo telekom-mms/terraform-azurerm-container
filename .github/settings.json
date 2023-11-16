@@ -6,7 +6,7 @@
     "topics": [
       "terraform",
       "azure",
-      "azurerm-container-registry"
+      "container-registry"
     ]
   }
 }
