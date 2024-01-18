@@ -110,7 +110,7 @@ locals {
         ultra_ssd_enabled             = null
         max_count                     = 10
         min_count                     = 2
-        node_count                    = 2
+        node_count                    = null
         workload_runtime              = null
         zones                         = [1, 2, 3]
         temporary_name_for_rotation   = "tmppool"
