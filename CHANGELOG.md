@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.6](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.6) (2024-04-09)
+
+[Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.5...1.0.6)
+
+**Merged pull requests:**
+
+- Issue 44 [\#45](https://github.com/telekom-mms/terraform-azurerm-container/pull/45) ([michaelamattes](https://github.com/michaelamattes))
+
 ## [1.0.5](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.5) (2024-01-19)
 
 [Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.4...1.0.5)
