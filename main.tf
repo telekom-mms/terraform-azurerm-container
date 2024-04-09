@@ -123,7 +123,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   http_application_routing_enabled    = local.kubernetes_cluster[each.key].http_application_routing_enabled
   image_cleaner_enabled               = local.kubernetes_cluster[each.key].image_cleaner_enabled
   image_cleaner_interval_hours        = local.kubernetes_cluster[each.key].image_cleaner_interval_hours
-  kubernetes_version                  = local.kubernetes_cluster[each.key].automatic_channel_upgrade == null ? data.azurerm_kubernetes_service_versions.kubernetes_service_versions[each.key].latest_version : local.kubernetes_cluster[each.key].kubernetes_version
+  kubernetes_version                  = local.kubernetes_cluster[each.key].automatic_channel_upgrade != null ? local.kubernetes_cluster[each.key].kubernetes_version : local.kubernetes_cluster[each.key].kubernetes_version == null ? data.azurerm_kubernetes_service_versions.kubernetes_service_versions[each.key].latest_version : local.kubernetes_cluster[each.key].kubernetes_version
   local_account_disabled              = local.kubernetes_cluster[each.key].local_account_disabled
   node_os_channel_upgrade             = local.kubernetes_cluster[each.key].node_os_channel_upgrade
   node_resource_group                 = local.kubernetes_cluster[each.key].node_resource_group
@@ -154,7 +154,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     node_labels                   = local.kubernetes_cluster[each.key].default_node_pool.node_labels
     node_taints                   = local.kubernetes_cluster[each.key].default_node_pool.node_taints
     only_critical_addons_enabled  = local.kubernetes_cluster[each.key].default_node_pool.only_critical_addons_enabled
-    orchestrator_version          = local.kubernetes_cluster[each.key].automatic_channel_upgrade == null ? data.azurerm_kubernetes_service_versions.kubernetes_service_versions[each.key].latest_version : local.kubernetes_cluster[each.key].default_node_pool.orchestrator_version
+    orchestrator_version          = local.kubernetes_cluster[each.key].automatic_channel_upgrade != null ? local.kubernetes_cluster[each.key].default_node_pool.orchestrator_version : local.kubernetes_cluster[each.key].default_node_pool.orchestrator_version == null ? data.azurerm_kubernetes_service_versions.kubernetes_service_versions[each.key].latest_version : local.kubernetes_cluster[each.key].default_node_pool.orchestrator_version
     os_disk_size_gb               = local.kubernetes_cluster[each.key].default_node_pool.os_disk_size_gb
     os_disk_type                  = local.kubernetes_cluster[each.key].default_node_pool.os_disk_type
     os_sku                        = local.kubernetes_cluster[each.key].default_node_pool.os_sku
