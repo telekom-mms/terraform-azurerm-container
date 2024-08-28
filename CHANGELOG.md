@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.7](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.7) (2024-08-28)
+
+[Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.6...1.0.7)
+
+**Implemented enhancements:**
+
+- Pin version of azurerm to compatible state   [\#48](https://github.com/telekom-mms/terraform-azurerm-container/pull/48) ([michaelamattes](https://github.com/michaelamattes))
+
+**Closed issues:**
+
+- Problem with module behavior when configuring automatic\_channel\_upgrade for Kubernetes clusters [\#44](https://github.com/telekom-mms/terraform-azurerm-container/issues/44)
+
 ## [1.0.6](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.6) (2024-04-09)
 
 [Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.5...1.0.6)
