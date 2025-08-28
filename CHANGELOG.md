@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.8](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.8) (2025-08-28)
+
+[Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.7...1.0.8)
+
+**Fixed bugs:**
+
+- fix terrascan workflow run [\#50](https://github.com/telekom-mms/terraform-azurerm-container/pull/50) ([michaelamattes](https://github.com/michaelamattes))
+
 ## [1.0.7](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.7) (2024-08-28)
 
 [Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.6...1.0.7)
@@ -34,11 +42,11 @@
 
 **Implemented enhancements:**
 
-- add kubernetes\_cluster resource [\#42](https://github.com/telekom-mms/terraform-azurerm-container/pull/42) ([michaelamattes](https://github.com/michaelamattes))
+- add kubernets\_cluster resource [\#42](https://github.com/telekom-mms/terraform-azurerm-container/pull/42) ([michaelamattes](https://github.com/michaelamattes))
 
 **Merged pull requests:**
 
-- Fixes for azure kubernetes cluster [\#41](https://github.com/telekom-mms/terraform-azurerm-container/pull/41) ([habr-mms](https://github.com/habr-mms))
+- Fixes for aks cluster [\#41](https://github.com/telekom-mms/terraform-azurerm-container/pull/41) ([habr-mms](https://github.com/habr-mms))
 - fix code style failures [\#39](https://github.com/telekom-mms/terraform-azurerm-container/pull/39) ([michaelamattes](https://github.com/michaelamattes))
 
 ## [1.0.3](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.3) (2023-07-12)
