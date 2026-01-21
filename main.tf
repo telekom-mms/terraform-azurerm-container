@@ -22,6 +22,8 @@ resource "azurerm_container_registry" "container_registry" {
   network_rule_bypass_option    = local.container_registry[each.key].network_rule_bypass_option
   anonymous_pull_enabled        = local.container_registry[each.key].anonymous_pull_enabled
   data_endpoint_enabled         = local.container_registry[each.key].data_endpoint_enabled
+  retention_policy_in_days      = local.container_registry[each.key].retention_policy_in_days
+  trust_policy_enabled          = local.container_registry[each.key].trust_policy_enabled
 
   // policy can only be applied when using the Premium sku
   dynamic "network_rule_set" {
@@ -39,34 +41,6 @@ resource "azurerm_container_registry" "container_registry" {
           ip_range = local.container_registry[each.key].network_rule_set.ip_rule[ip_rule.key].ip_range
         }
       }
-
-      dynamic "virtual_network" {
-        for_each = contains(keys(local.container_registry[each.key].network_rule_set.virtual_network), "action") ? {} : local.container_registry[each.key].network_rule_set.virtual_network
-
-        content {
-          action    = local.container_registry[each.key].network_rule_set.virtual_network[virtual_network.key].action
-          subnet_id = local.container_registry[each.key].network_rule_set.virtual_network[virtual_network.key].subnet_id
-        }
-      }
-    }
-  }
-
-  // policy can only be applied when using the Premium sku
-  dynamic "retention_policy" {
-    for_each = local.container_registry[each.key].sku == "Premium" ? [0] : []
-
-    content {
-      days    = local.container_registry[each.key].retention_policy.days
-      enabled = local.container_registry[each.key].retention_policy.enabled
-    }
-  }
-
-  // policy can only be applied when using the Premium sku
-  dynamic "trust_policy" {
-    for_each = local.container_registry[each.key].sku == "Premium" ? [0] : []
-
-    content {
-      enabled = local.container_registry[each.key].trust_policy.enabled
     }
   }
 
@@ -86,7 +60,6 @@ resource "azurerm_container_registry" "container_registry" {
     ])
 
     content {
-      enabled            = local.container_registry[each.key].encryption.enabled
       key_vault_key_id   = local.container_registry[each.key].encryption.key_vault_key_id
       identity_client_id = local.container_registry[each.key].encryption.identity_client_id
     }
@@ -115,7 +88,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   resource_group_name                 = local.kubernetes_cluster[each.key].resource_group_name
   dns_prefix                          = local.kubernetes_cluster[each.key].dns_prefix != null ? local.kubernetes_cluster[each.key].dns_prefix : null
   dns_prefix_private_cluster          = local.kubernetes_cluster[each.key].dns_prefix_private_cluster != null ? local.kubernetes_cluster[each.key].dns_prefix_private_cluster : null
-  automatic_channel_upgrade           = local.kubernetes_cluster[each.key].automatic_channel_upgrade
+  automatic_upgrade_channel           = local.kubernetes_cluster[each.key].automatic_upgrade_channel
   azure_policy_enabled                = local.kubernetes_cluster[each.key].azure_policy_enabled
   custom_ca_trust_certificates_base64 = local.kubernetes_cluster[each.key].custom_ca_trust_certificates_base64
   disk_encryption_set_id              = local.kubernetes_cluster[each.key].disk_encryption_set_id
@@ -123,9 +96,9 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   http_application_routing_enabled    = local.kubernetes_cluster[each.key].http_application_routing_enabled
   image_cleaner_enabled               = local.kubernetes_cluster[each.key].image_cleaner_enabled
   image_cleaner_interval_hours        = local.kubernetes_cluster[each.key].image_cleaner_interval_hours
-  kubernetes_version                  = local.kubernetes_cluster[each.key].automatic_channel_upgrade != null ? local.kubernetes_cluster[each.key].kubernetes_version : local.kubernetes_cluster[each.key].kubernetes_version == null ? data.azurerm_kubernetes_service_versions.kubernetes_service_versions[each.key].latest_version : local.kubernetes_cluster[each.key].kubernetes_version
+  kubernetes_version                  = local.kubernetes_cluster[each.key].automatic_upgrade_channel != null ? local.kubernetes_cluster[each.key].kubernetes_version : local.kubernetes_cluster[each.key].kubernetes_version == null ? data.azurerm_kubernetes_service_versions.kubernetes_service_versions[each.key].latest_version : local.kubernetes_cluster[each.key].kubernetes_version
   local_account_disabled              = local.kubernetes_cluster[each.key].local_account_disabled
-  node_os_channel_upgrade             = local.kubernetes_cluster[each.key].node_os_channel_upgrade
+  node_os_upgrade_channel             = local.kubernetes_cluster[each.key].node_os_upgrade_channel
   node_resource_group                 = local.kubernetes_cluster[each.key].node_resource_group
   oidc_issuer_enabled                 = local.kubernetes_cluster[each.key].oidc_issuer_enabled
   open_service_mesh_enabled           = local.kubernetes_cluster[each.key].open_service_mesh_enabled
@@ -141,20 +114,17 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     name                          = local.kubernetes_cluster[each.key].default_node_pool.name
     vm_size                       = local.kubernetes_cluster[each.key].default_node_pool.vm_size
     capacity_reservation_group_id = local.kubernetes_cluster[each.key].default_node_pool.capacity_reservation_group_id
-    custom_ca_trust_enabled       = local.kubernetes_cluster[each.key].default_node_pool.custom_ca_trust_enabled
-    enable_auto_scaling           = local.kubernetes_cluster[each.key].default_node_pool.enable_auto_scaling
-    enable_host_encryption        = local.kubernetes_cluster[each.key].default_node_pool.enable_host_encryption
-    enable_node_public_ip         = local.kubernetes_cluster[each.key].default_node_pool.enable_node_public_ip
+    auto_scaling_enabled          = local.kubernetes_cluster[each.key].default_node_pool.auto_scaling_enabled
+    host_encryption_enabled       = local.kubernetes_cluster[each.key].default_node_pool.host_encryption_enabled
+    node_public_ip_enabled        = local.kubernetes_cluster[each.key].default_node_pool.node_public_ip_enabled
     host_group_id                 = local.kubernetes_cluster[each.key].default_node_pool.host_group_id
     fips_enabled                  = local.kubernetes_cluster[each.key].default_node_pool.fips_enabled
     kubelet_disk_type             = local.kubernetes_cluster[each.key].default_node_pool.kubelet_disk_type
     max_pods                      = local.kubernetes_cluster[each.key].default_node_pool.max_pods
-    message_of_the_day            = local.kubernetes_cluster[each.key].default_node_pool.message_of_the_day
     node_public_ip_prefix_id      = local.kubernetes_cluster[each.key].default_node_pool.node_public_ip_prefix_id
     node_labels                   = local.kubernetes_cluster[each.key].default_node_pool.node_labels
-    node_taints                   = local.kubernetes_cluster[each.key].default_node_pool.node_taints
     only_critical_addons_enabled  = local.kubernetes_cluster[each.key].default_node_pool.only_critical_addons_enabled
-    orchestrator_version          = local.kubernetes_cluster[each.key].automatic_channel_upgrade != null ? local.kubernetes_cluster[each.key].default_node_pool.orchestrator_version : local.kubernetes_cluster[each.key].default_node_pool.orchestrator_version == null ? data.azurerm_kubernetes_service_versions.kubernetes_service_versions[each.key].latest_version : local.kubernetes_cluster[each.key].default_node_pool.orchestrator_version
+    orchestrator_version          = local.kubernetes_cluster[each.key].automatic_upgrade_channel != null ? local.kubernetes_cluster[each.key].default_node_pool.orchestrator_version : local.kubernetes_cluster[each.key].default_node_pool.orchestrator_version == null ? data.azurerm_kubernetes_service_versions.kubernetes_service_versions[each.key].latest_version : local.kubernetes_cluster[each.key].default_node_pool.orchestrator_version
     os_disk_size_gb               = local.kubernetes_cluster[each.key].default_node_pool.os_disk_size_gb
     os_disk_type                  = local.kubernetes_cluster[each.key].default_node_pool.os_disk_type
     os_sku                        = local.kubernetes_cluster[each.key].default_node_pool.os_sku
@@ -165,11 +135,11 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     type                          = local.kubernetes_cluster[each.key].default_node_pool.type
     ultra_ssd_enabled             = local.kubernetes_cluster[each.key].default_node_pool.ultra_ssd_enabled
     vnet_subnet_id                = local.kubernetes_cluster[each.key].network_profile.network_plugin == "azure" ? local.kubernetes_cluster[each.key].default_node_pool.vnet_subnet_id : null
-    max_count                     = local.kubernetes_cluster[each.key].default_node_pool.enable_auto_scaling == true ? local.kubernetes_cluster[each.key].default_node_pool.max_count : null
-    min_count                     = local.kubernetes_cluster[each.key].default_node_pool.enable_auto_scaling == true ? local.kubernetes_cluster[each.key].default_node_pool.min_count : null
+    max_count                     = local.kubernetes_cluster[each.key].default_node_pool.auto_scaling_enabled == true ? local.kubernetes_cluster[each.key].default_node_pool.max_count : null
+    min_count                     = local.kubernetes_cluster[each.key].default_node_pool.auto_scaling_enabled == true ? local.kubernetes_cluster[each.key].default_node_pool.min_count : null
     node_count                    = local.kubernetes_cluster[each.key].default_node_pool.node_count
-    workload_runtime              = local.kubernetes_cluster[each.key].default_node_pool.enable_auto_scaling == false ? local.kubernetes_cluster[each.key].default_node_pool.workload_runtime : null
-    zones                         = local.kubernetes_cluster[each.key].default_node_pool.enable_auto_scaling == false ? local.kubernetes_cluster[each.key].default_node_pool.zones : null
+    workload_runtime              = local.kubernetes_cluster[each.key].default_node_pool.auto_scaling_enabled == false ? local.kubernetes_cluster[each.key].default_node_pool.workload_runtime : null
+    zones                         = local.kubernetes_cluster[each.key].default_node_pool.auto_scaling_enabled == false ? local.kubernetes_cluster[each.key].default_node_pool.zones : null
     temporary_name_for_rotation   = local.kubernetes_cluster[each.key].default_node_pool.temporary_name_for_rotation
 
     dynamic "kubelet_config" {
@@ -243,12 +213,11 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
       }
     }
 
-    dynamic "upgrade_settings" {
-      for_each = local.kubernetes_cluster[each.key].default_node_pool.upgrade_settings == {} ? [] : [0]
-
-      content {
-        max_surge = local.kubernetes_cluster[each.key].default_node_pool.upgrade_settings.max_surge
-      }
+    upgrade_settings {
+      drain_timeout_in_minutes      = local.kubernetes_cluster[each.key].default_node_pool.upgrade_settings.drain_timeout_in_minutes
+      node_soak_duration_in_minutes = local.kubernetes_cluster[each.key].default_node_pool.upgrade_settings.node_soak_duration_in_minutes
+      max_surge                     = local.kubernetes_cluster[each.key].default_node_pool.upgrade_settings.max_surge
+      undrainable_node_behavior     = local.kubernetes_cluster[each.key].default_node_pool.upgrade_settings.undrainable_node_behavior
     }
 
     tags = local.kubernetes_cluster[each.key].default_node_pool.tags
@@ -266,9 +235,9 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     for_each = length(compact(flatten(values(local.kubernetes_cluster[each.key].api_server_access_profile)))) == 0 ? [] : [0]
 
     content {
-      authorized_ip_ranges     = local.kubernetes_cluster[each.key].api_server_access_profile.authorized_ip_ranges
-      subnet_id                = local.kubernetes_cluster[each.key].api_server_access_profile.subnet_id
-      vnet_integration_enabled = local.kubernetes_cluster[each.key].api_server_access_profile.vnet_integration_enabled
+      authorized_ip_ranges                = local.kubernetes_cluster[each.key].api_server_access_profile.authorized_ip_ranges
+      subnet_id                           = local.kubernetes_cluster[each.key].api_server_access_profile.subnet_id
+      virtual_network_integration_enabled = local.kubernetes_cluster[each.key].api_server_access_profile.virtual_network_integration_enabled
     }
   }
 
@@ -300,13 +269,9 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     for_each = length(compact(flatten(values(local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control)))) == 0 ? [] : [0]
 
     content {
-      managed                = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.managed
       tenant_id              = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.tenant_id
       admin_group_object_ids = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.admin_group_object_ids
       azure_rbac_enabled     = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.azure_rbac_enabled
-      client_app_id          = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.client_app_id
-      server_app_id          = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.server_app_id
-      server_app_secret      = local.kubernetes_cluster[each.key].azure_active_directory_role_based_access_control.server_app_secret
     }
   }
 
@@ -488,7 +453,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
       #ts:skip=AC_AZURE_0158 terrascan - enabled over local default setting
       network_policy      = local.kubernetes_cluster[each.key].network_profile.network_policy
       dns_service_ip      = local.kubernetes_cluster[each.key].network_profile.dns_service_ip
-      ebpf_data_plane     = local.kubernetes_cluster[each.key].network_profile.ebpf_data_plane
+      network_data_plane  = local.kubernetes_cluster[each.key].network_profile.network_data_plane
       network_plugin_mode = local.kubernetes_cluster[each.key].network_profile.network_plugin_mode
       outbound_type       = local.kubernetes_cluster[each.key].network_profile.outbound_type
       pod_cidr            = local.kubernetes_cluster[each.key].network_profile.pod_cidr
@@ -555,7 +520,6 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     content {
       blob_driver_enabled         = local.kubernetes_cluster[each.key].storage_profile.blob_driver_enabled
       disk_driver_enabled         = local.kubernetes_cluster[each.key].storage_profile.disk_driver_enabled
-      disk_driver_version         = local.kubernetes_cluster[each.key].storage_profile.disk_driver_version
       file_driver_enabled         = local.kubernetes_cluster[each.key].storage_profile.file_driver_enabled
       snapshot_controller_enabled = local.kubernetes_cluster[each.key].storage_profile.snapshot_controller_enabled
     }
@@ -565,7 +529,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     for_each = local.kubernetes_cluster[each.key].web_app_routing != {} ? [0] : []
 
     content {
-      dns_zone_id = local.kubernetes_cluster[each.key].web_app_routing.dns_zone_id
+      dns_zone_ids = local.kubernetes_cluster[each.key].web_app_routing.dns_zone_ids
     }
   }
 
