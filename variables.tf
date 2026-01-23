@@ -29,23 +29,14 @@ locals {
         ip_rule = {
           action = "Allow"
         }
-        virtual_network = {
-          action = "Allow"
-        }
       }
-      retention_policy = {
-        days    = 7
-        enabled = true
-      }
-      trust_policy = {
-        enabled = false
-      }
+      retention_policy_in_days = null
+      trust_policy_enabled     = null
       identity = {
         type         = null
         identity_ids = null
       }
       encryption = {
-        enabled            = false
         key_vault_key_id   = null
         identity_client_id = null
       }
@@ -61,7 +52,7 @@ locals {
       name                                = ""
       dns_prefix                          = null
       dns_prefix_private_cluster          = null
-      automatic_channel_upgrade           = "stable" // latest patch version -1
+      automatic_upgrade_channel           = "stable" // latest patch version -1
       azure_policy_enabled                = null
       custom_ca_trust_certificates_base64 = null
       disk_encryption_set_id              = null
@@ -71,7 +62,7 @@ locals {
       image_cleaner_interval_hours        = null
       kubernetes_version                  = null
       local_account_disabled              = null
-      node_os_channel_upgrade             = null
+      node_os_upgrade_channel             = null
       node_resource_group                 = null
       oidc_issuer_enabled                 = null
       open_service_mesh_enabled           = null
@@ -85,18 +76,15 @@ locals {
       workload_identity_enabled           = null
       default_node_pool = {
         capacity_reservation_group_id = null
-        custom_ca_trust_enabled       = null
-        enable_auto_scaling           = true
-        enable_host_encryption        = null
-        enable_node_public_ip         = null
+        auto_scaling_enabled          = true
+        host_encryption_enabled       = null
+        node_public_ip_enabled        = null
         host_group_id                 = null
         fips_enabled                  = null
         kubelet_disk_type             = null
         max_pods                      = null
-        message_of_the_day            = null
         node_public_ip_prefix_id      = null
         node_labels                   = null
-        node_taints                   = null
         only_critical_addons_enabled  = null
         orchestrator_version          = null
         os_disk_size_gb               = null
@@ -163,14 +151,19 @@ locals {
           }
         }
         node_network_profile = {}
-        upgrade_settings     = {}
-        tags                 = {}
+        upgrade_settings = {
+          drain_timeout_in_minutes      = 0
+          node_soak_duration_in_minutes = 0
+          max_surge                     = "10%"
+          undrainable_node_behavior     = null
+        }
+        tags = {}
       }
       aci_connector_linux = {}
       api_server_access_profile = {
-        authorized_ip_ranges     = null
-        subnet_id                = null
-        vnet_integration_enabled = null
+        authorized_ip_ranges                = null
+        subnet_id                           = null
+        virtual_network_integration_enabled = null
       }
       auto_scaler_profile = {
         balance_similar_node_groups      = null
@@ -192,13 +185,9 @@ locals {
         skip_nodes_with_system_pods      = null
       }
       azure_active_directory_role_based_access_control = {
-        managed                = null
         tenant_id              = null
         admin_group_object_ids = null
         azure_rbac_enabled     = null
-        client_app_id          = null
-        server_app_id          = null
-        server_app_secret      = null
       }
       confidential_computing = {}
       http_proxy_config = {
@@ -261,7 +250,7 @@ locals {
         network_mode        = null
         network_policy      = "azure" // also enables network_policy terrascan policy AC_AZURE_0158
         dns_service_ip      = null
-        ebpf_data_plane     = null
+        network_data_plane  = null
         network_plugin_mode = null
         outbound_type       = "loadBalancer"
         pod_cidr            = null
@@ -294,7 +283,6 @@ locals {
       storage_profile = {
         blob_driver_enabled         = null
         disk_driver_enabled         = null
-        disk_driver_version         = null
         file_driver_enabled         = null
         snapshot_controller_enabled = null
       }
@@ -325,7 +313,7 @@ locals {
     container_registry => merge(
       local.container_registry_values[container_registry],
       {
-        for config in ["retention_policy", "trust_policy", "identity", "encryption", "georeplications"] :
+        for config in ["identity", "encryption", "georeplications"] :
         config => merge(local.default.container_registry[config], local.container_registry_values[container_registry][config])
       },
       {
