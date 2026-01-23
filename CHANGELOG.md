@@ -1,12 +1,16 @@
 # Changelog
 
-## [1.0.8](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.8) (2025-08-28)
+## [2.0.0](https://github.com/telekom-mms/terraform-azurerm-container/tree/2.0.0) (2026-01-23)
 
-[Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.7...1.0.8)
+[Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.7...2.0.0)
 
 **Fixed bugs:**
 
-- fix terrascan workflow run [\#50](https://github.com/telekom-mms/terraform-azurerm-container/pull/50) ([michaelamattes](https://github.com/michaelamattes))
+- fix terrascan workflow run [\#50](https://github.com/telekom-mms/terraform-azurerm-container/pull/50) ([mikaEz](https://github.com/mikaEz))
+
+**Merged pull requests:**
+
+- Upgrade azurerm version to 4 [\#51](https://github.com/telekom-mms/terraform-azurerm-container/pull/51) ([mikaEz](https://github.com/mikaEz))
 
 ## [1.0.7](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.7) (2024-08-28)
 
@@ -14,7 +18,7 @@
 
 **Implemented enhancements:**
 
-- Pin version of azurerm to compatible state   [\#48](https://github.com/telekom-mms/terraform-azurerm-container/pull/48) ([michaelamattes](https://github.com/michaelamattes))
+- Pin version of azurerm to compatible state   [\#48](https://github.com/telekom-mms/terraform-azurerm-container/pull/48) ([mikaEz](https://github.com/mikaEz))
 
 **Closed issues:**
 
@@ -26,7 +30,7 @@
 
 **Merged pull requests:**
 
-- Issue 44 [\#45](https://github.com/telekom-mms/terraform-azurerm-container/pull/45) ([michaelamattes](https://github.com/michaelamattes))
+- Issue 44 [\#45](https://github.com/telekom-mms/terraform-azurerm-container/pull/45) ([mikaEz](https://github.com/mikaEz))
 
 ## [1.0.5](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.5) (2024-01-19)
 
@@ -42,12 +46,12 @@
 
 **Implemented enhancements:**
 
-- add kubernetes\_cluster resource [\#42](https://github.com/telekom-mms/terraform-azurerm-container/pull/42) ([michaelamattes](https://github.com/michaelamattes))
+- add kubernets\_cluster resource [\#42](https://github.com/telekom-mms/terraform-azurerm-container/pull/42) ([mikaEz](https://github.com/mikaEz))
 
 **Merged pull requests:**
 
-- Fixes for azure kubernetes cluster [\#41](https://github.com/telekom-mms/terraform-azurerm-container/pull/41) ([habr-mms](https://github.com/habr-mms))
-- fix code style failures [\#39](https://github.com/telekom-mms/terraform-azurerm-container/pull/39) ([michaelamattes](https://github.com/michaelamattes))
+- Fixes for aks cluster [\#41](https://github.com/telekom-mms/terraform-azurerm-container/pull/41) ([habr-mms](https://github.com/habr-mms))
+- fix code style failures [\#39](https://github.com/telekom-mms/terraform-azurerm-container/pull/39) ([mikaEz](https://github.com/mikaEz))
 
 ## [1.0.3](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.3) (2023-07-12)
 
@@ -55,11 +59,11 @@
 
 **Fixed bugs:**
 
-- fix failure for merge loop on network rules [\#38](https://github.com/telekom-mms/terraform-azurerm-container/pull/38) ([michaelamattes](https://github.com/michaelamattes))
+- fix failure for merge loop on network rules [\#38](https://github.com/telekom-mms/terraform-azurerm-container/pull/38) ([mikaEz](https://github.com/mikaEz))
 
 **Merged pull requests:**
 
-- add codespell workflow [\#37](https://github.com/telekom-mms/terraform-azurerm-container/pull/37) ([michaelamattes](https://github.com/michaelamattes))
+- add codespell workflow [\#37](https://github.com/telekom-mms/terraform-azurerm-container/pull/37) ([mikaEz](https://github.com/mikaEz))
 
 ## [1.0.2](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.2) (2023-05-10)
 
@@ -67,7 +71,7 @@
 
 **Merged pull requests:**
 
-- optimize workflows [\#36](https://github.com/telekom-mms/terraform-azurerm-container/pull/36) ([michaelamattes](https://github.com/michaelamattes))
+- optimize workflows [\#36](https://github.com/telekom-mms/terraform-azurerm-container/pull/36) ([mikaEz](https://github.com/mikaEz))
 
 ## [1.0.1](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.1) (2023-05-03)
 
@@ -75,7 +79,7 @@
 
 **Fixed bugs:**
 
-- fix style of comments [\#35](https://github.com/telekom-mms/terraform-azurerm-container/pull/35) ([michaelamattes](https://github.com/michaelamattes))
+- fix style of comments [\#35](https://github.com/telekom-mms/terraform-azurerm-container/pull/35) ([mikaEz](https://github.com/mikaEz))
 
 **Closed issues:**
 
@@ -87,9 +91,9 @@
 
 **Merged pull requests:**
 
-- Version [\#17](https://github.com/telekom-mms/terraform-azurerm-container/pull/17) ([michaelamattes](https://github.com/michaelamattes))
-- Test [\#6](https://github.com/telekom-mms/terraform-azurerm-container/pull/6) ([michaelamattes](https://github.com/michaelamattes))
-- add Renovate Dependency Dashboard and automatic merge on patch updates [\#3](https://github.com/telekom-mms/terraform-azurerm-container/pull/3) ([michaelamattes](https://github.com/michaelamattes))
+- Version [\#17](https://github.com/telekom-mms/terraform-azurerm-container/pull/17) ([mikaEz](https://github.com/mikaEz))
+- Test [\#6](https://github.com/telekom-mms/terraform-azurerm-container/pull/6) ([mikaEz](https://github.com/mikaEz))
+- add Renovate Dependency Dashboard and automatic merge on patch updates [\#3](https://github.com/telekom-mms/terraform-azurerm-container/pull/3) ([mikaEz](https://github.com/mikaEz))
 
 
 
