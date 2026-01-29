@@ -61,7 +61,7 @@ locals {
       image_cleaner_enabled               = null
       image_cleaner_interval_hours        = null
       kubernetes_version                  = null
-      local_account_disabled              = null
+      local_account_disabled              = true // change default for security - prevent shared admin kube config
       node_os_upgrade_channel             = null
       node_resource_group                 = null
       oidc_issuer_enabled                 = null
