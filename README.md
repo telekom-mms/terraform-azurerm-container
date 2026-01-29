@@ -171,6 +171,10 @@ module "container" {
       auto_scaler_profile = {
         max_unready_nodes = 1
       }
+      azure_active_directory_role_based_access_control = {
+        admin_group_object_ids = ["AAD-GROUP-OBJECT-ID"]
+        azure_rbac_enabled     = true
+      }
       maintenance_window = {
         allowed = {
           mo = {

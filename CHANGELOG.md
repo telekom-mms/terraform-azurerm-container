@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.1](https://github.com/telekom-mms/terraform-azurerm-container/tree/2.0.1) (2026-01-29)
+
+[Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/2.0.0...2.0.1)
+
+**Implemented enhancements:**
+
+- \[Enhancement\] Upgrade to AzureRM 4.0 [\#47](https://github.com/telekom-mms/terraform-azurerm-container/issues/47)
+
+**Merged pull requests:**
+
+- change default behaviour - deactivate local kube config admin accounts [\#52](https://github.com/telekom-mms/terraform-azurerm-container/pull/52) ([mikaEz](https://github.com/mikaEz))
+
 ## [2.0.0](https://github.com/telekom-mms/terraform-azurerm-container/tree/2.0.0) (2026-01-23)
 
 [Full Changelog](https://github.com/telekom-mms/terraform-azurerm-container/compare/1.0.7...2.0.0)
@@ -46,11 +58,11 @@
 
 **Implemented enhancements:**
 
-- add kubernetes\_cluster resource [\#42](https://github.com/telekom-mms/terraform-azurerm-container/pull/42) ([mikaEz](https://github.com/mikaEz))
+- add kubernets\_cluster resource [\#42](https://github.com/telekom-mms/terraform-azurerm-container/pull/42) ([mikaEz](https://github.com/mikaEz))
 
 **Merged pull requests:**
 
-- Fixes for azuer kubernetes cluster [\#41](https://github.com/telekom-mms/terraform-azurerm-container/pull/41) ([habr-mms](https://github.com/habr-mms))
+- Fixes for aks cluster [\#41](https://github.com/telekom-mms/terraform-azurerm-container/pull/41) ([habr-mms](https://github.com/habr-mms))
 - fix code style failures [\#39](https://github.com/telekom-mms/terraform-azurerm-container/pull/39) ([mikaEz](https://github.com/mikaEz))
 
 ## [1.0.3](https://github.com/telekom-mms/terraform-azurerm-container/tree/1.0.3) (2023-07-12)
