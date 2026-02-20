@@ -4,9 +4,10 @@
     "visibility": "public",
     "default_branch": "main",
     "topics": [
-      "terraform",
       "azure",
-      "container-registry"
+      "container-registry",
+      "kubernetes-cluster",
+      "terraform"
     ]
   }
 }
