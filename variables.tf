@@ -52,8 +52,10 @@ locals {
       name                                = ""
       dns_prefix                          = null
       dns_prefix_private_cluster          = null
+      ai_toolchain_operator_enabled       = null
       automatic_upgrade_channel           = "stable" // latest patch version -1
       azure_policy_enabled                = null
+      cost_analysis_enabled               = null
       custom_ca_trust_certificates_base64 = null
       disk_encryption_set_id              = null
       edge_zone                           = null
@@ -73,6 +75,7 @@ locals {
       role_based_access_control_enabled   = true
       run_command_enabled                 = null
       sku_tier                            = "Standard"
+      support_plan                        = null
       workload_identity_enabled           = null
       default_node_pool = {
         capacity_reservation_group_id = null
@@ -104,7 +107,7 @@ locals {
         temporary_name_for_rotation   = "tmppool"
         kubelet_config = {
           allowed_unsafe_sysctls    = null
-          container_log_max_line    = null
+          container_log_max_files   = null
           container_log_max_size_mb = null
           cpu_cfs_quota_enabled     = null
           cpu_cfs_quota_period      = null
@@ -115,9 +118,9 @@ locals {
           topology_manager_policy   = null
         }
         linux_os_config = {
-          swap_file_size_mb             = null
-          transparent_huge_page_defrag  = null
-          transparent_huge_page_enabled = null
+          swap_file_size_mb            = null
+          transparent_huge_page_defrag = null
+          transparent_huge_page        = null
           sysctl_config = {
             fs_aio_max_nr                      = null
             fs_file_max                        = null
@@ -166,23 +169,26 @@ locals {
         virtual_network_integration_enabled = null
       }
       auto_scaler_profile = {
-        balance_similar_node_groups      = null
-        expander                         = null
-        max_graceful_termination_sec     = null
-        max_node_provisioning_time       = null
-        max_unready_nodes                = null
-        max_unready_percentage           = null
-        new_pod_scale_up_delay           = null
-        scale_down_delay_after_add       = null
-        scale_down_delay_after_delete    = null
-        scale_down_delay_after_failure   = null
-        scan_interval                    = null
-        scale_down_unneeded              = null
-        scale_down_unready               = null
-        scale_down_utilization_threshold = null
-        empty_bulk_delete_max            = null
-        skip_nodes_with_local_storage    = null
-        skip_nodes_with_system_pods      = null
+        balance_similar_node_groups                   = null
+        daemonset_eviction_for_empty_nodes_enabled    = null
+        daemonset_eviction_for_occupied_nodes_enabled = null
+        expander                                      = null
+        ignore_daemonsets_utilization_enabled         = null
+        max_graceful_termination_sec                  = null
+        max_node_provisioning_time                    = null
+        max_unready_nodes                             = null
+        max_unready_percentage                        = null
+        new_pod_scale_up_delay                        = null
+        scale_down_delay_after_add                    = null
+        scale_down_delay_after_delete                 = null
+        scale_down_delay_after_failure                = null
+        scan_interval                                 = null
+        scale_down_unneeded                           = null
+        scale_down_unready                            = null
+        scale_down_utilization_threshold              = null
+        empty_bulk_delete_max                         = null
+        skip_nodes_with_local_storage                 = null
+        skip_nodes_with_system_pods                   = null
       }
       azure_active_directory_role_based_access_control = {
         tenant_id              = null
@@ -259,6 +265,10 @@ locals {
         service_cidrs       = null
         ip_versions         = ["IPv4"]
         load_balancer_sku   = "standard"
+        advanced_networking = {
+          observability_enabled = null
+          security_enabled      = null
+        }
         load_balancer_profile = {
           idle_timeout_in_minutes     = null
           managed_outbound_ip_count   = null
@@ -280,6 +290,10 @@ locals {
         vertical_pod_autoscaler_enabled = null
       }
       service_principal = {}
+      upgrade_override = {
+        force_upgrade_enabled = null
+        effective_until       = null
+      }
       storage_profile = {
         blob_driver_enabled         = null
         disk_driver_enabled         = null
@@ -355,6 +369,7 @@ locals {
           "workload_autoscaler_profile",
           "service_principal",
           "storage_profile",
+          "upgrade_override",
           "web_app_routing"
         ] :
         config => merge(local.default.kubernetes_cluster[config], local.kubernetes_cluster_values[kubernetes_cluster][config])
@@ -384,7 +399,7 @@ locals {
         config => merge(
           merge(local.default.kubernetes_cluster[config], local.kubernetes_cluster_values[kubernetes_cluster][config]),
           {
-            for subconfig in ["load_balancer_profile", "nat_gateway_profile"] :
+            for subconfig in ["advanced_networking", "load_balancer_profile", "nat_gateway_profile"] :
             subconfig => merge(local.default.kubernetes_cluster[config][subconfig], lookup(local.kubernetes_cluster_values[kubernetes_cluster][config], subconfig, {}))
           }
         )
